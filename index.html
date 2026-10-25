@@ -162,12 +162,16 @@
         return;
       }
 
-      const { error } = await supabaseClient.auth.signInWithOAuth({
-        provider: "discord",
-        options: { redirectTo: https://navy67.github.io/community-arena/ }
-      });
+     const { error } = await supabaseClient.auth.signInWithOAuth({
+  provider: "discord",
+  options: {
+    redirectTo: "https://navy67.github.io/community-arena/"
+  }
+});
 
-      if (error) message.textContent = error.message;
+if (error) {
+  message.textContent = error.message;
+}
     });
 
     async function loadGame() {
