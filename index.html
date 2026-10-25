@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite Leaders Community</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #202033;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 7%;
+      background: white;
+      border-bottom: 1px solid #e9e9f0;
+    }
+    .brand { font-weight: 800; font-size: 18px; }
+    .brand span { color: #7057e8; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      background: #7057e8;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: #5d45d0; }
+    main { max-width: 950px; margin: 45px auto; padding: 0 20px; }
+    .hero, .panel {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      border: 1px solid #ececf3;
+      margin-bottom: 22px;
+    }
+    .eyebrow {
+      color: #7057e8;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+    h1 { font-size: clamp(30px, 5vw, 48px); margin: 14px 0; }
+    p { color: #737387; line-height: 1.6; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .stat { background: #f6f5ff; padding: 20px; border-radius: 12px; }
+    .stat strong { display: block; font-size: 25px; margin-top: 8px; }
+    .player { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      object-fit: cover; background: #eceaf8;
+    }
+    .muted { color: #85859a; font-size: 13px; }
+    .entry {
+      display: flex; align-items: center; gap: 14px;
+      padding: 15px 0; border-bottom: 1px solid #eeeef4;
+    }
+    .entry:last-child { border-bottom: 0; }
+    .rank { width: 28px; font-weight: 800; color: #7057e8; }
+    .score { margin-left: auto; font-weight: 700; }
+    #message { margin-top: 14px; font-size: 14px; }
+    footer { text-align: center; color: #85859a; padding: 25px; font-size: 13px; }
+    @media (max-width: 550px) {
+      header { padding: 18px; }
+      .brand { font-size: 14px; }
+      main { margin-top: 25px; }
+      .hero, .panel { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">ELITE <span>LEADERS</span></div>
+    <button id="login">Connexion Discord</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">YOUR COMMUNITY. YOUR COMPETITION.</div>
+      <h1>Prove you're the best.</h1>
+      <p>Participe aux défis, gagne de l'XP et deviens le champion hebdomadaire d'Elite Leaders Community.</p>
+      <div id="profile" class="muted">Connecte-toi pour accéder à ton profil.</div>
+      <div class="stats">
+        <div class="stat">
+          <span class="muted">Ton XP total</span>
+          <strong id="totalXp">—</strong>
+        </div>
+        <div class="stat">
+          <span class="muted">Champion de la semaine</span>
+          <strong id="champion">À déterminer</strong>
+        </div>
+      </div>
+      <div id="message" role="status"></div>
+    </section>
+
+    <section class="panel">
+      <h2>🏆 Weekly Leaderboard</h2>
+      <p>Les meilleurs joueurs de cette semaine.</p>
+      <div id="leaderboard" class="muted">
+        Connecte-toi pour consulter le classement.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>🎁 Récompense hebdomadaire</h2>
+      <p>Le joueur classé premier à la clôture de la semaine remporte le rôle Discord exclusif de champion pendant 7 jours.</p>
+    </section>
+  </main>
+
+  <footer>ELITE LEADERS COMMUNITY · COMMUNITY CHALLENGES</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Remplace ces deux valeurs par celles de TON projet Supabase.
+    const SUPABASE_URL = "https://pjoumnfygwcltiwkxexi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_oc91JI_OwgAXHP_x9KAk-A_cRxLYfSQ";
+
+    const configReady =
+      SUPABASE_URL.startsWith("https://") &&
+      !SUPABASE_URL.includes("COLLE_ICI") &&
+      !SUPABASE_KEY.includes("COLLE_ICI");
+
+    const loginButton = document.getElementById("login");
+    const message = document.getElementById("message");
+    const leaderboard = document.getElementById("leaderboard");
+
+    let supabaseClient = null;
+
+    if (configReady) {
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL, SUPABASE_KEY
+      );
+    } else {
+      message.textContent =
+        "Configuration nécessaire : ajoute l'URL et la clé publique Supabase.";
+    }
+
+    // Début de la semaine : lundi en UTC.
+    function getWeekStart() {
+      const now = new Date();
+      const day = now.getUTCDay();
+      const daysSinceMonday = (day + 6) % 7;
+      now.setUTCDate(now.getUTCDate() - daysSinceMonday);
+      return now.toISOString().slice(0, 10);
+    }
+
+    loginButton.addEventListener("click", async () => {
+      if (!supabaseClient) {
+        message.textContent = "Configure d'abord Supabase dans le code.";
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: "discord",
+        options: { redirectTo: window.location.origin }
+      });
+
+      if (error) message.textContent = error.message;
+    });
+
+    async function loadGame() {
+      if (!supabaseClient) return;
+
+      const { data: authData, error: authError } =
+        await supabaseClient.auth.getUser();
+
+      if (authError || !authData.user) {
+        loginButton.textContent = "Connexion Discord";
+        return;
+      }
+
+      const user = authData.user;
+      loginButton.textContent = "Déconnexion";
+
+      loginButton.onclick = async () => {
+        await supabaseClient.auth.signOut();
+        window.location.reload();
+      };
+
+      const { data: profile } = await supabaseClient
+        .from("profiles")
+        .select("discord_username, avatar_url, total_xp")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      const username =
+        profile?.discord_username ||
+        user.user_metadata?.custom_claims?.global_name ||
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        "Joueur";
+
+      document.getElementById("profile").textContent =
+        "Connecté : " + username;
+
+      document.getElementById("totalXp").textContent =
+        profile ? profile.total_xp : "0";
+
+      const { data: scores, error } = await supabaseClient
+        .from("weekly_scores")
+        .select("user_id, xp, profiles(discord_username)")
+        .eq("week_start", getWeekStart())
+        .order("xp", { ascending: false })
+        .limit(20);
+
+      if (error) {
+        leaderboard.textContent =
+          "Classement indisponible : " + error.message;
+        return;
+      }
+
+      if (!scores || scores.length === 0) {
+        leaderboard.textContent =
+          "Aucun score enregistré cette semaine pour le moment.";
+        document.getElementById("champion").textContent = "À déterminer";
+        return;
+      }
+
+      document.getElementById("champion").textContent =
+        scores[0].profiles?.discord_username || "Joueur";
+
+      leaderboard.innerHTML = "";
+
+      scores.forEach((score, index) => {
+        const row = document.createElement("div");
+        row.className = "entry";
+
+        const rank = document.createElement("span");
+        rank.className = "rank";
+        rank.textContent = "#" + (index + 1);
+
+        const name = document.createElement("span");
+        name.textContent =
+          score.profiles?.discord_username || "Joueur";
+
+        const points = document.createElement("span");
+        points.className = "score";
+        points.textContent = Number(score.xp).toLocaleString() + " XP";
+
+        row.append(rank, name, points);
+        leaderboard.appendChild(row);
+      });
+    }
+
+    if (supabaseClient) {
+      loadGame();
+      supabaseClient.auth.onAuthStateChange((event) => {
+        if (event === "SIGNED_IN") loadGame();
+      });
+    }
+  </script>
+</body>
+</html>
