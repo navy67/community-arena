@@ -1,58 +1,1670 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10091d">
 <title>Truth or Dare — Elite Edition</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#090810;--panel:#13111e;--panel2:#1b1729;--line:#30283f;--purple:#a855f7;--pink:#ec4899;--text:#f8f7ff;--muted:#aaa4bd;--green:#55e6a5;--red:#ff6584}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#34204e 0,transparent 45%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Arial,sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{border:0;border-radius:12px;padding:12px 16px;background:linear-gradient(110deg,var(--purple),var(--pink));color:white;font-weight:800;cursor:pointer;transition:.15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}button:disabled{opacity:.4;cursor:not-allowed;transform:none}button.secondary{background:#292337;border:1px solid #453855}button.ghost{background:transparent;border:1px solid var(--line)}button.good{background:linear-gradient(110deg,#0d9f78,#41c98b)}input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#0d0b15;color:var(--text);padding:13px 14px;outline:none}input:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #a855f722}textarea{resize:vertical;min-height:86px}.wrap{width:min(1120px,calc(100% - 30px));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid #ffffff12}.brand{font-weight:950;letter-spacing:1.5px}.brand span{color:#c084fc}.pill{border:1px solid #52396b;color:#d9b8ff;border-radius:99px;padding:7px 11px;font-size:11px;font-weight:900;letter-spacing:1.4px}.hero{text-align:center;padding:48px 0 30px}.eyebrow{color:#d8b4fe;font-size:11px;font-weight:900;letter-spacing:3px}.hero h1{font-size:clamp(32px,7vw,66px);line-height:1.02;margin:14px 0 12px;letter-spacing:-2px}.hero h1 em{font-style:normal;color:#c084fc;text-shadow:0 0 28px #a855f755}.hero p{color:var(--muted);max-width:600px;margin:0 auto;line-height:1.6}.panel{background:linear-gradient(145deg,#171322f5,#100e18f5);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 60px #0004}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.panel h2{font-size:18px;margin:0 0 7px}.sub{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 16px}.field{display:grid;gap:7px;margin:12px 0}.field label{font-size:12px;color:#c9c2d8;font-weight:750}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.status{font-size:13px;color:var(--muted);margin-top:12px;min-height:18px}.hidden{display:none!important}.roomhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:26px 0 16px}.code{font-size:24px;letter-spacing:5px;font-weight:950;color:#e9d5ff}.roomgrid{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;align-items:start}.players{display:grid;gap:8px}.player{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #ffffff10;background:#ffffff04;border-radius:12px}.dot{width:9px;height:9px;background:#7c718e;border-radius:50%;flex:none}.player.selected{border-color:#bd79ff;background:#a855f71b}.player.selected .dot{background:#c084fc;box-shadow:0 0 12px #c084fc}.player .name{font-weight:750;overflow-wrap:anywhere}.player .tag{margin-left:auto;font-size:10px;color:#d8b4fe}.wheelbox{display:grid;place-items:center;padding:20px 0}.wheel{width:min(310px,70vw);aspect-ratio:1;border-radius:50%;border:7px solid #382449;background:radial-gradient(circle,#20142d 0 40%,#100d18 41% 64%,#231430 65%);box-shadow:0 0 0 2px #a855f755,0 0 55px #a855f72b;display:grid;place-items:center;text-align:center;padding:30px;position:relative}.wheel:before{content:'▼';position:absolute;top:-19px;color:#e9d5ff;text-shadow:0 0 12px #c084fc;font-size:24px}.wheel .big{font-size:clamp(22px,4vw,34px);font-weight:950;overflow-wrap:anywhere}.wheel .small{color:#c5b8d6;font-size:11px;letter-spacing:2px;margin-top:7px}.wheel.spinning{animation:pulse .45s infinite alternate}@keyframes pulse{to{box-shadow:0 0 0 5px #a855f744,0 0 80px #a855f777;transform:scale(1.015)}}.modebuttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.modebuttons button{padding:18px 10px;font-size:16px}.modebuttons .truth{background:linear-gradient(120deg,#7c3aed,#a855f7)}.modebuttons .dare{background:linear-gradient(120deg,#db2777,#f43f5e)}.list{display:grid;gap:10px}.proposal{border:1px solid var(--line);border-radius:13px;padding:13px;background:#0d0b15}.proposal p{white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0 10px;line-height:1.5}.proposal .meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}.badge{padding:4px 7px;border-radius:6px;background:#342144;color:#e9d5ff;font-size:10px;font-weight:900}.proposal.selectedtop{border-color:#a855f7;background:#a855f712}.empty{border:1px dashed #44374f;border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13px}.notice{border:1px solid #4a3b5b;background:#21192d;border-radius:12px;padding:12px;color:#d6c9e6;font-size:12px;line-height:1.5}.result{border:1px solid #7751a1;background:linear-gradient(120deg,#251633,#15101e);padding:17px;border-radius:14px;margin-top:12px}.result strong{color:#e9d5ff}.footer{text-align:center;padding:28px 0 35px;color:#716a81;font-size:11px;letter-spacing:1px}@media(max-width:760px){.grid,.roomgrid{grid-template-columns:1fr}.hero{padding-top:35px}.panel{padding:18px}.top{padding:16px 0}.roomhead{align-items:flex-start}}
-</style></head>
-<body><div class="wrap">
-<header class="top"><div class="brand">ELITE <span>LEADERS</span> COMMUNITY</div><div class="pill">PARTY MODE · LIVE</div></header>
-<section class="hero"><div class="eyebrow">THE COMMUNITY GAME NIGHT</div><h1>TRUTH OR DARE<br><em>ELITE EDITION</em></h1><p>Un joueur est tiré au sort. La communauté propose. Le host choisit le Top 3. Le joueur sélectionné décide.</p></section>
-<section id="lobby" class="grid">
- <div class="panel"><h2>Créer une partie</h2><p class="sub">Réservé au host. Crée un code à partager dans le Stage Discord.</p><div class="field"><label>PSEUDO DISCORD DU HOST</label><input id="hostNameCreate" maxlength="32" placeholder="Ex. Navy"></div><div class="field"><label>PIN du host (4 caractères minimum)</label><input id="hostPinCreate" type="password" minlength="4" placeholder="Choisis un PIN secret"></div><button id="createBtn" style="width:100%">＋ CRÉER LA PARTIE</button><div id="createMsg" class="status"></div></div>
- <div class="panel"><h2>Rejoindre une partie</h2><p class="sub">Écris ton pseudo Discord exactement comme dans le serveur, puis le Party Code donné par le host.</p><div class="field"><label>PSEUDO DISCORD</label><input id="joinName" maxlength="32" placeholder="Ex. Navy"></div><div class="field"><label>PARTY CODE</label><input id="joinCode" maxlength="6" placeholder="Ex. A7K2PQ" style="text-transform:uppercase;letter-spacing:3px"></div><button id="joinBtn" style="width:100%">REJOINDRE LA PARTIE →</button><div id="joinMsg" class="status"></div></div>
+:root{--bg:#0c0715;--panel:#171025;--purple:#9c55ff;--pink:#f09bff;--muted:#b7a9ca;--border:#49305f}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#291343 0,#10091d 48%,#09060f 100%);color:#fff;font-family:Inter,"Segoe UI",Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:12px;padding:13px 18px;font-weight:750;transition:.2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.12)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.primary{background:linear-gradient(120deg,#8b42f5,#d16dff);color:white;box-shadow:0 5px 25px #a34aff30}
+.secondary{background:#251833;border:1px solid var(--border);color:white}
+.danger{background:#512039;color:#ffd7e5}
+a{color:#d7a0ff}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 5%;border-bottom:1px solid #ffffff12}
+.brand{font-weight:900;letter-spacing:2px;color:#d8b3ff}
+.discord{font-size:13px;text-decoration:none;border:1px solid var(--border);padding:10px 13px;border-radius:10px}
+main{max-width:900px;margin:auto;padding:38px 18px 70px}
+.hero{text-align:center;padding:28px 0 30px}
+.logo{width:100px;height:100px;object-fit:contain;border-radius:20px;filter:drop-shadow(0 0 22px #ae5cff55)}
+.eyebrow{color:#d4a0ff;letter-spacing:4px;font-size:11px;font-weight:800;margin:20px 0}
+h1{font-size:clamp(32px,7vw,62px);line-height:1.05;margin:10px 0;font-weight:950}
+h1 span{display:block;color:#bf83ff}
+.subtitle{color:var(--muted);line-height:1.7}
+.panel{background:linear-gradient(145deg,#1c1229ee,#120c1cee);border:1px solid var(--border);border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 15px 45px #0002}
+h2{margin:0 0 14px;font-size:21px}
+h3{font-size:15px}
+label{display:block;color:var(--muted);font-size:13px;margin:13px 0 7px}
+input,select{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;background:#0e0917;color:white;outline:none}
+input:focus,select:focus{border-color:var(--purple)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.notice{font-size:12px;color:var(--muted);line-height:1.7}
+.hidden{display:none!important}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.code{font-size:27px;letter-spacing:6px;color:#d5a6ff;font-weight:900}
+.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;margin:15px 0}
+.player{padding:12px;background:#22152f;border:1px solid #48305b;border-radius:11px;overflow-wrap:anywhere}
+.player small{display:block;color:var(--muted);margin-top:5px}
+.tag{font-size:11px;color:#dfb9ff;border:1px solid #70439a;border-radius:20px;padding:4px 8px}
+.status{color:#d7b8ff;font-size:13px}
+.choice{width:100%;padding:22px 10px;font-size:20px;border:1px solid #7642a4;background:#241535;color:white}
+.choice strong{display:block;font-size:30px;margin-bottom:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.prompt{border:1px solid #583875;background:#211430;padding:17px;border-radius:14px;margin-top:12px}
+.prompt p{line-height:1.5;overflow-wrap:anywhere}
+.prompt button{width:100%;margin-top:7px}
+footer{text-align:center;padding:20px;color:#887a9a;font-size:12px}
+hr{border:0;border-top:1px solid #ffffff14;margin:18px 0}
+@media(max-width:500px){header{padding:14px}.discord{font-size:11px}main{padding:20px 13px}.panel{padding:17px}.actions{grid-template-columns:1fr}}
+
+.wheel-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:18px 0}
+.wheel-pointer{font-size:30px;line-height:1;color:#ffd7ff;filter:drop-shadow(0 0 8px #d16dff)}
+.wheel{width:min( min(76vw, 390px), 390px);aspect-ratio:1;border-radius:50%;position:relative;
+  border:7px solid #d5a6ff;box-shadow:0 0 0 5px #2b1740,0 0 35px #a34aff66;
+  overflow:hidden;transition:transform 7.5s cubic-bezier(.08,.82,.12,1);background:#241535}
+.wheel canvas{display:block;width:100%;height:100%}
+.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:24%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,#f0c7ff,#8b42f5);border:5px solid #fff;
+  color:#241033;font-weight:1000;font-size:clamp(10px,2.5vw,17px);box-shadow:0 0 20px #0008}
+.wheel-result{font-size:22px;font-weight:900;color:#e3c1ff;text-align:center;min-height:32px}
+
+/* "X has been selected!" banner, shown to every player when the wheel stops */
+.wheel-announce{min-height:64px;width:100%;display:grid;place-items:center;text-align:center;margin-top:4px}
+.wheel-announce.show{animation:announceIn .7s cubic-bezier(.2,1.2,.3,1) both}
+.wheel-announce span{display:inline-block;padding:14px 22px;border-radius:16px;border:1px solid #a98bff;
+  background:linear-gradient(120deg,#3a1d63,#5b2a8f);color:#fff;font-size:clamp(17px,4.6vw,24px);
+  font-weight:900;box-shadow:0 0 34px #a34aff66}
+.wheel-announce b{color:#f0c7ff}
+@keyframes announceIn{from{opacity:0;transform:translateY(14px) scale(.9)}to{opacity:1;transform:none}}
+
+/* Final leaderboard */
+.board{display:grid;gap:9px;margin:20px 0 22px;text-align:left}
+.board-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;
+  padding:13px 14px;border:1px solid #48305b;border-radius:14px;background:#22152f}
+.board-row.top{border-color:#a98bff;background:linear-gradient(110deg,#33204f,#241535)}
+.board-row.me{box-shadow:inset 0 0 0 1px #f0c7ff88}
+.board-rank{font-size:22px;font-weight:1000;color:#c5a7ff;text-align:center;font-variant-numeric:tabular-nums}
+.board-name{font-weight:800;overflow-wrap:anywhere}
+.board-name small{display:block;color:var(--muted);font-weight:600;margin-top:3px;font-size:12px}
+.board-badge{font-size:11px;font-weight:900;letter-spacing:1px;border-radius:20px;padding:5px 9px;white-space:nowrap}
+.board-badge.win{color:#1d0f33;background:#e3c1ff}
+.board-badge.out{color:#d9a7b8;border:1px solid #70394f}
+
+
+/* ELITE DRAFT ROOM — new Top 3 visual direction */
+.top3-shell{margin-top:24px;padding:22px;border:1px solid #344653;border-radius:12px;background:linear-gradient(145deg,#111d27,#0b121a);box-shadow:0 20px 55px #0008;position:relative;overflow:hidden}
+.top3-shell:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(#61e7d5,#7b8cff,#ffbd69)}
+.top3-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.top3-kicker{font-size:10px;letter-spacing:3px;color:#61e7d5;font-weight:900}
+.top3-title{font-size:25px;font-weight:950;margin:7px 0;color:#f4f8fb;letter-spacing:-.7px}
+.top3-count{white-space:nowrap;border:1px solid #4a6972;background:#142b32;color:#9cf8e8;border-radius:7px;padding:9px 12px;font-size:12px;font-weight:900;font-variant-numeric:tabular-nums}
+.top3-help{font-size:13px;color:#9aabb8;line-height:1.65;margin:8px 0 19px;max-width:620px}
+.top3-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.top3-option{display:grid;grid-template-columns:42px 1fr;align-items:start;gap:12px;padding:16px 14px;border:1px solid #293b48;border-radius:10px;background:#14212c;cursor:pointer;transition:all .18s ease;min-height:116px}
+.top3-option:hover{border-color:#61e7d5;transform:translateY(-2px);background:#182b35}
+.top3-option:has(.topThreeChoice:checked){border-color:#61e7d5;background:linear-gradient(135deg,#173b3d,#172b3b);box-shadow:inset 0 0 0 1px #61e7d566,0 9px 24px #0005}
+.top3-option input{appearance:none;width:24px;height:24px;margin:2px 0 0;border:1px solid #607887;border-radius:6px;background:#0a141c;cursor:pointer;position:relative}
+.top3-option input:checked{border-color:#61e7d5;background:#61e7d5}
+.top3-option input:checked:after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#092026;font-size:16px;font-weight:1000}
+.top3-option-copy{min-width:0}
+.top3-option-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}
+.top3-option-number{font-size:10px;letter-spacing:1.8px;color:#61e7d5;font-weight:950}
+.top3-selected-tag{font-size:9px;letter-spacing:1px;color:#092026;background:#61e7d5;border-radius:4px;padding:4px 6px;opacity:0;font-weight:950}
+.top3-option:has(.topThreeChoice:checked) .top3-selected-tag{opacity:1}
+.top3-option-text{display:block;color:#e8f0f4;font-size:14px;line-height:1.55;overflow-wrap:anywhere}
+.top3-confirm{width:100%;margin-top:18px;padding:16px;border-radius:8px;background:linear-gradient(100deg,#31bfae,#6de4d2);color:#071b20;letter-spacing:1.6px;font-size:12px;font-weight:1000;box-shadow:0 8px 25px #35cdb333}
+.top3-confirm:disabled{filter:grayscale(.7);opacity:.4;box-shadow:none}
+.top3-footnote{text-align:center;color:#8194a1;font-size:11px;margin:12px 0 0}
+
+
+
+/* Selected player's Top 3 — editorial / championship card design */
+.challenge-pick-wrap{margin:22px 0 4px;padding:clamp(17px,4vw,28px);border:1px solid #3c344d;border-radius:22px;background:radial-gradient(ellipse at 85% 0%,#343052 0%,transparent 48%),linear-gradient(145deg,#171725,#0d101b 72%);box-shadow:0 22px 60px #0007;position:relative;overflow:hidden}
+.challenge-pick-wrap:after{content:"";position:absolute;right:-65px;top:90px;width:190px;height:190px;border:1px solid #c6a7ff20;border-radius:50%;box-shadow:0 0 0 22px #c6a7ff08,0 0 0 44px #c6a7ff05;pointer-events:none}
+.challenge-pick-eyebrow{font-size:10px;letter-spacing:3px;font-weight:900;color:#c5a7ff;text-transform:uppercase}
+.challenge-pick-title{margin:10px 0 5px;font-size:clamp(25px,6vw,38px);line-height:1;font-weight:1000;letter-spacing:-1.5px;color:#fff}
+.challenge-pick-title span{color:#c5a7ff}
+.challenge-pick-subtitle{margin:10px 0 22px;color:#a9a5b8;font-size:13px;line-height:1.65;max-width:460px}
+.challenge-pick-list{display:grid;gap:11px;position:relative;z-index:1}
+.challenge-pick-card{display:grid;grid-template-columns:54px minmax(0,1fr) 24px;align-items:center;gap:13px;padding:17px 16px;border:1px solid #373449;border-radius:15px;background:linear-gradient(110deg,#222237,#171827);box-shadow:inset 3px 0 0 #a98bff30;transition:transform .2s,border-color .2s,background .2s}
+.challenge-pick-card:hover{transform:translateX(4px);border-color:#a98bff;background:linear-gradient(110deg,#302b4b,#1b1c2e)}
+/* The selected player clicks a card to take it on (click handled on #turnArea). */
+.challenge-pick-card{width:100%;text-align:left;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.challenge-pick-card *{pointer-events:none}
+.challenge-pick-card.busy{opacity:.5;pointer-events:none;transform:none}
+.challenge-pick-index{font-size:27px;line-height:1;font-weight:1000;letter-spacing:-1px;color:#a98bff;font-variant-numeric:tabular-nums}
+.challenge-pick-label{font-size:9px;letter-spacing:2px;font-weight:950;color:#8e8ba4;margin-bottom:7px}
+.challenge-pick-text{font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,3.8vw,19px);font-weight:700;line-height:1.45;color:#f6f2ff;overflow-wrap:anywhere}
+.challenge-pick-mark{color:#c5a7ff;font-size:18px;text-align:right;text-shadow:0 0 14px #b28cff80}
+.challenge-pick-footer{display:flex;justify-content:space-between;gap:10px;margin-top:19px;padding-top:13px;border-top:1px solid #ffffff16;color:#77758e;font-size:9px;letter-spacing:2px;font-weight:900}
+@media(max-width:430px){.challenge-pick-card{grid-template-columns:39px minmax(0,1fr) 16px;padding:14px 12px;gap:10px}.challenge-pick-index{font-size:23px}}
+
+/* Challenge / vote / result screens */
+.tally{display:flex;gap:10px;justify-content:center;margin:14px 0 4px;flex-wrap:wrap}
+.tally span{border:1px solid var(--border);background:#22152f;border-radius:10px;padding:9px 14px;font-weight:800;font-size:14px}
+.vote-count{text-align:center;font-weight:800;color:#d7b8ff;font-size:14px;margin:14px 0 4px}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">✦ ELITE LEADERS</div>
+  <a class="discord" href="https://discord.gg/elt-elite" target="_blank" rel="noopener">Join our Discord ↗</a>
+</header>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <img class="logo" src="elt-logo.gif" alt="ELT Logo" onerror="this.style.display='none'">
+    <div class="eyebrow">ELITE LEADERS COMMUNITY PRESENTS</div>
+    <h1>TRUTH OR DARE <span>ELITE EDITION</span></h1>
+   <p class="subtitle">Dare to be honest. Brave enough to take the challenge.</p>
+  </div>
+
+  <div class="panel">
+    <h2>✦ Enter the Arena</h2>
+    <label for="nickname">Your Discord nickname</label>
+    <input id="nickname" maxlength="24" placeholder="e.g. Navy" autocomplete="nickname">
+    <div class="actions">
+      <button class="primary" onclick="createRoom()">＋ Create a Game</button>
+      <button class="secondary" onclick="showJoin()">↗ Join a Game</button>
+    </div>
+    <div id="joinBox" class="hidden">
+      <hr>
+      <label for="joinCode">Room Code</label>
+      <input id="joinCode" maxlength="6" placeholder="ABC123" style="text-transform:uppercase">
+      <button class="primary" style="width:100%;margin-top:12px" onclick="joinRoom()">Join Room</button>
+    </div>
+    <p id="homeMsg" class="notice" aria-live="polite"></p>
+  </div>
 </section>
-<section id="room" class="hidden">
- <div class="roomhead"><div><div class="eyebrow">PARTIE EN COURS</div><div class="code">CODE : <span id="roomCodeLabel">------</span></div><div id="roomStatus" class="sub" style="margin:5px 0 0">En attente des joueurs…</div></div><div class="actions"><button id="copyLinkBtn" class="secondary">Copier le lien</button><button id="leaveBtn" class="ghost">Quitter</button></div></div>
- <div class="roomgrid">
-  <div class="panel"><h2>Joueurs connectés <span id="playerCount" class="badge">0</span></h2><p class="sub">Les noms s'ajoutent automatiquement à la roulette.</p><div id="playersList" class="players"></div><div id="hostControls" class="hidden"><div class="notice" style="margin-top:14px">Tu es le host. Partage ton écran dans le Stage Discord pour que tout le monde voie le tirage.</div><button id="drawBtn" style="width:100%;margin-top:12px">LANCER LE TIRAGE</button></div></div>
-  <div class="panel"><h2>Le tirage</h2><p class="sub">Un tirage aléatoire parmi les joueurs présents.</p><div class="wheelbox"><div id="wheel" class="wheel"><div><div id="wheelName" class="big">READY?</div><div id="wheelSmall" class="small">WAITING FOR HOST</div></div></div></div><div id="selectedInfo" class="notice">Le host lancera le tirage quand tout le monde sera prêt.</div><div id="modeArea" class="hidden"><h2 style="margin-top:18px">Choisis ton mode</h2><p class="sub">Tu as été sélectionné. Choisis Truth ou Dare.</p><div class="modebuttons"><button class="truth" id="truthBtn">TRUTH</button><button class="dare" id="dareBtn">DARE</button></div></div><div id="submitArea" class="hidden"><h2 style="margin-top:18px">Propose une idée</h2><p id="submitHint" class="sub">Une seule proposition par joueur et par tour.</p><textarea id="promptText" maxlength="350" placeholder="Écris une question ou un gage respectueux…"></textarea><button id="submitBtn" style="width:100%;margin-top:9px">ENVOYER MA PROPOSITION</button><div id="submitMsg" class="status"></div></div><div id="top3Area" class="hidden"><div class="result"><strong>TOP 3 DU HOST</strong><p class="sub" style="margin:5px 0 0">Le joueur sélectionné choisit une proposition parmi les trois finalistes.</p><div id="top3List" class="list" style="margin-top:12px"></div></div></div><div id="chosenResult" class="hidden result"></div></div>
- </div>
- <div class="panel" style="margin-top:16px"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><div><h2>Propositions de la communauté</h2><p class="sub" style="margin:5px 0 0">Les joueurs non sélectionnés peuvent envoyer une seule idée par tour.</p></div><div id="proposalCount" class="badge">0 PROPOSITIONS</div></div><div id="hostProposalHint" class="sub hidden" style="margin-top:10px">Host : clique sur « Top 3 » pour retenir exactement trois propositions.</div><div id="proposalsList" class="list" style="margin-top:14px"></div><div id="hostFinishArea" class="hidden"><button id="finishTop3Btn" style="width:100%;margin-top:14px">VALIDER LE TOP 3</button></div><div id="hostNextArea" class="hidden"><button id="nextRoundBtn" class="secondary" style="width:100%;margin-top:14px">TOUR SUIVANT</button></div>
- </div>
+
+<section id="lobby" class="hidden">
+  <div class="panel">
+    <div class="row">
+      <h2>✦ Waiting Room</h2>
+      <span class="tag">WAITING</span>
+    </div>
+    <p class="notice">Share the room code with the other players.</p>
+    <div class="row">
+      <div id="roomCode" class="code">------</div>
+      <button class="secondary" onclick="copyCode()">Copy Code</button>
+    </div>
+    <hr>
+    <div class="row">
+      <h3>Players</h3>
+      <span id="playerCount" class="status"></span>
+    </div>
+    <div id="lobbyPlayers" class="players"></div>
+    <p class="notice">At least 4 real players must join using the room code before the host can start.</p>
+    <button id="startBtn" class="primary" style="width:100%;margin-top:12px" onclick="startGame()">Start Game</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="goHome()">Leave Room</button>
+    <p id="lobbyMsg" class="notice" aria-live="polite"></p>
+  </div>
 </section>
-<div class="footer">ELITE LEADERS COMMUNITY · PLAY FAIR · RESPECT EVERYONE</div></div>
+
+<section id="game" class="hidden">
+  <div class="panel">
+    <div class="row">
+      <span class="tag" id="roundTag">ROUND 1</span>
+      <span id="aliveCount" class="status"></span>
+    </div>
+    <h2 id="gameTitle" style="margin-top:18px">The draw is about to begin...</h2>
+    <p id="gameMsg" class="subtitle"></p>
+    <div id="turnArea"></div>
+  </div>
+  <div class="panel">
+    <div class="row"><h3>Players</h3><span class="status">ELITE ARENA</span></div>
+    <div id="gamePlayers" class="players"></div>
+  </div>
+</section>
+
+<section id="end" class="hidden">
+  <div class="panel" style="text-align:center">
+    <div style="font-size:48px">♛</div>
+    <h2>ELITE CHAMPIONS</h2>
+    <p id="winners" class="subtitle"></p>
+    <div class="eyebrow" style="margin:22px 0 0">FINAL LEADERBOARD</div>
+    <div id="leaderboard" class="board"></div>
+    <div id="playAgainBox"></div>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="goHome()">Back to Home</button>
+  </div>
+</section>
+</main>
+
+<footer>ELITE LEADERS COMMUNITY · TRUTH OR DARE ELITE EDITION</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL='https://pjoumnfygwcltiwkxexi.supabase.co';
-const SUPABASE_KEY='sb_publishable_oc91JI_OwgAXHP_x9KAk-A_cRxLYfSQ';
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const $=id=>document.getElementById(id);let roomCode=null,playerId=null,hostPin=null,isHost=false,lastState=null,pollHandle=null,busy=false;
-const esc=s=>String(s??'');
-function msg(id,text){$(id).textContent=text}
-function rpc(name,args){return db.rpc(name,args)}
-function setRoomView(){ $('lobby').classList.add('hidden');$('room').classList.remove('hidden');$('roomCodeLabel').textContent=roomCode; $('hostControls').classList.toggle('hidden',!isHost); $('hostProposalHint').classList.toggle('hidden',!isHost); if(pollHandle)clearInterval(pollHandle);refresh();pollHandle=setInterval(refresh,2200);}
-$('createBtn').onclick=async()=>{if(busy)return;const pin=$('hostPinCreate').value.trim(),name=$('hostNameCreate').value.trim();if(!name){msg('createMsg','Écris ton pseudo Discord.');return}if(pin.length<4){msg('createMsg','Choisis un PIN de 4 caractères minimum.');return}busy=true;$('createBtn').disabled=true;msg('createMsg','Création…');try{const {data,error}=await rpc('tod_create_room',{p_host_pin:pin});if(error)throw error;roomCode=data.code;hostPin=pin;playerId=crypto.randomUUID();isHost=true;const {error:joinError}=await rpc('tod_join_room',{p_code:roomCode,p_name:name,p_player_id:playerId});if(joinError)throw joinError;sessionStorage.setItem('tod_host_'+roomCode,pin);sessionStorage.setItem('tod_player_'+roomCode,playerId);history.replaceState({},'',location.pathname+'?room='+roomCode);setRoomView();}catch(e){msg('createMsg','Erreur : '+e.message)}finally{busy=false;$('createBtn').disabled=false}};
-$('joinBtn').onclick=async()=>{if(busy)return;const name=$('joinName').value.trim(),code=$('joinCode').value.trim().toUpperCase();if(!name){msg('joinMsg','Écris ton pseudo Discord.');return}if(!/^[A-Z0-9]{6}$/.test(code)){msg('joinMsg','Le Party Code doit contenir 6 lettres/chiffres.');return}busy=true;$('joinBtn').disabled=true;msg('joinMsg','Connexion à la partie…');try{const id=crypto.randomUUID();const {data,error}=await rpc('tod_join_room',{p_code:code,p_name:name,p_player_id:id});if(error)throw error;roomCode=code;playerId=id;isHost=false;sessionStorage.setItem('tod_player_'+roomCode,playerId);setRoomView()}catch(e){msg('joinMsg',e.message.includes('ROOM_NOT_FOUND')?'Party Code invalide.':e.message.includes('NAME_TAKEN')?'Ce pseudo est déjà utilisé dans cette partie.':'Impossible de rejoindre : '+e.message)}finally{busy=false;$('joinBtn').disabled=false}};
-$('copyLinkBtn').onclick=async()=>{try{await navigator.clipboard.writeText(location.origin+location.pathname+'?room='+roomCode);msg('roomStatus','Lien copié. Envoie aussi le Party Code : '+roomCode)}catch{msg('roomStatus','Lien : '+location.origin+location.pathname+'?room='+roomCode+' · Code : '+roomCode)}};
-$('leaveBtn').onclick=()=>{if(pollHandle)clearInterval(pollHandle);location.href=location.pathname};
-$('drawBtn').onclick=async()=>{if(!isHost)return;try{const {error}=await rpc('tod_draw_player',{p_code:roomCode,p_host_pin:hostPin});if(error)throw error;await refresh()}catch(e){msg('roomStatus','Erreur de tirage : '+e.message)}};
-async function chooseMode(mode){try{const {error}=await rpc('tod_choose_mode',{p_code:roomCode,p_player_id:playerId,p_mode:mode});if(error)throw error;await refresh()}catch(e){msg('selectedInfo','Erreur : '+e.message)}}$('truthBtn').onclick=()=>chooseMode('truth');$('dareBtn').onclick=()=>chooseMode('dare');
-$('submitBtn').onclick=async()=>{const content=$('promptText').value.trim();if(!content){msg('submitMsg','Écris ta proposition avant de l’envoyer.');return} $('submitBtn').disabled=true;try{const {error}=await rpc('tod_submit_prompt',{p_code:roomCode,p_player_id:playerId,p_content:content});if(error)throw error;$('promptText').value='';msg('submitMsg','Proposition envoyée !');await refresh()}catch(e){msg('submitMsg',e.message.includes('ALREADY_SUBMITTED')?'Tu as déjà envoyé une proposition pour ce tour.':e.message)}finally{$('submitBtn').disabled=false}};
-async function toggleTop3(promptId){try{const {error}=await rpc('tod_toggle_top3',{p_code:roomCode,p_host_pin:hostPin,p_prompt_id:promptId});if(error)throw error;await refresh()}catch(e){alert(e.message.includes('TOP3_LIMIT')?'Tu peux retenir seulement 3 propositions.':e.message)}};
-$('finishTop3Btn').onclick=async()=>{try{const {error}=await rpc('tod_finalize_top3',{p_code:roomCode,p_host_pin:hostPin});if(error)throw error;await refresh()}catch(e){msg('roomStatus','Sélectionne exactement 3 propositions avant de valider.')}};
-async function pickPrompt(id){try{const {error}=await rpc('tod_pick_prompt',{p_code:roomCode,p_player_id:playerId,p_prompt_id:id});if(error)throw error;await refresh()}catch(e){msg('selectedInfo','Erreur : '+e.message)}};
-$('nextRoundBtn').onclick=async()=>{if(!confirm('Lancer un nouveau tour ?'))return;$('drawBtn').click()};
-function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
-function render(state){lastState=state;const room=state.room,players=state.players||[],prompts=state.prompts||[];const selected=players.find(p=>p.id===room.selected_player_id);$('playerCount').textContent=players.length;$('playersList').replaceChildren();players.forEach(p=>{const row=el('div','player'+(p.id===room.selected_player_id?' selected':''));row.append(el('span','dot'));row.append(el('span','name',p.name));if(p.id===room.selected_player_id)row.append(el('span','tag','SELECTED'));$('playersList').append(row)});$('drawBtn').disabled=players.length<2;
-$('wheelName').textContent=selected?selected.name:'READY?';$('wheelSmall').textContent=selected?'PLAYER SELECTED':'WAITING FOR HOST';$('selectedInfo').textContent=selected?selected.name+' a été sélectionné. '+(room.mode?'Mode : '+room.mode.toUpperCase()+'.':'En attente de son choix Truth ou Dare.'):'Le host lancera le tirage quand au moins deux joueurs seront présents.';$('roomStatus').textContent='Tour '+(room.round_no||0)+' · '+(room.mode?room.mode.toUpperCase():'choix du joueur');
-const meSelected=selected&&selected.id===playerId;$('modeArea').classList.toggle('hidden',!(meSelected&&!room.mode));$('truthBtn').disabled=!!room.mode;$('dareBtn').disabled=!!room.mode;
-const alreadySubmitted=prompts.some(p=>p.author_player_id===playerId);const canSubmit=!!room.mode&&!meSelected&&!room.top3_finalized&&!room.chosen_prompt_id&&!alreadySubmitted;$('submitArea').classList.toggle('hidden',!canSubmit);$('submitHint').textContent='Mode '+(room.mode||'')+' : '+(room.mode==='truth'?'écris une question.':'écris un gage sûr et respectueux.')+' Une seule proposition par tour.';if(room.mode&&alreadySubmitted)msg('submitMsg','Tu as déjà envoyé ta proposition pour ce tour.');
-$('proposalCount').textContent=prompts.length+' PROPOSITION'+(prompts.length===1?'':'S');$('proposalsList').replaceChildren();if(!prompts.length)$('proposalsList').append(el('div','empty','Pas encore de propositions. Les joueurs peuvent envoyer leur idée après le choix Truth/Dare.'));
-prompts.forEach(p=>{const card=el('div','proposal'+(p.is_top3?' selectedtop':''));const meta=el('div','meta');meta.append(el('span','badge',p.kind.toUpperCase()),el('span','',p.author_name||'Joueur'));if(p.is_top3)meta.append(el('span','badge','TOP 3'));card.append(meta,el('p','',p.content));if(isHost&&!room.top3_finalized&&!room.chosen_prompt_id){const b=el('button',p.is_top3?'secondary':'ghost',p.is_top3?'Retirer du Top 3':'＋ Top 3');b.onclick=()=>toggleTop3(p.id);card.append(b)}$('proposalsList').append(card)});
-const top=prompts.filter(p=>p.is_top3);$('hostFinishArea').classList.toggle('hidden',!(isHost&&prompts.length&&!room.top3_finalized&&!room.chosen_prompt_id));$('finishTop3Btn').disabled=top.length!==3;$('finishTop3Btn').textContent='VALIDER LE TOP 3 ('+top.length+'/3)';$('top3Area').classList.toggle('hidden',!room.top3_finalized||!!room.chosen_prompt_id);$('top3List').replaceChildren();if(room.top3_finalized&&!room.chosen_prompt_id){if(meSelected){top.forEach(p=>{const card=el('div','proposal');card.append(el('div','meta','TOP 3 · '+(p.author_name||'Joueur')),el('p','',p.content));const b=el('button','good','CHOISIR CETTE PROPOSITION');b.onclick=()=>pickPrompt(p.id);card.append(b);$('top3List').append(card)})}else $('top3List').append(el('div','empty','Le Top 3 est prêt. Le joueur sélectionné va choisir son défi.'))}
-$('chosenResult').classList.toggle('hidden',!room.chosen_prompt_id);if(room.chosen_prompt_id){const chosen=prompts.find(p=>p.id===room.chosen_prompt_id);$('chosenResult').replaceChildren(el('strong','', 'DÉFI CHOISI · '+(chosen?.kind||room.mode||'').toUpperCase()),el('p','',chosen?.content||'Proposition sélectionnée'),el('div','sub','Proposé par '+(chosen?.author_name||'un membre')))}
+const SUPABASE_URL = "https://yqmqrvlcrzbyagystfiv.supabase.co";
+const SUPABASE_KEY = "sb_publishable_AM6NIbruev4ntKaoJCej9A_5g1ehSJu";
+const { createClient } = window.supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+
+const SESSION_KEYS = ["tod_room_code", "tod_player_id", "tod_player_token", "tod_host_token"];
+
+let room = null;
+let me = null;
+let isHost = false;
+let players = [];
+let round = 0;
+let selected = null;
+let kind = "";
+let top3SelectedIds = new Set();
+let phase = "lobby";
+
+// Game screen state
+let roomState = null;      // last state received from Supabase
+let drawPool = [];         // ids of the players the wheel can land on
+let lastViewKey = "";      // used to re-render the screen only when something really changed
+let syncing = false;       // prevents two polls from overlapping
+let proposalSent = false;  // true once I have submitted my proposal this round
+let spinPending = false;   // host pressed the spin button, waiting for the server
+
+let lobbySyncInterval = null;
+let gameSyncTimer = null;
+let proposalSyncTimer = null;
+let endSyncTimer = null;
+
+function show(id) {
+  ["home","lobby","game","end"].forEach(
+    x => $(x).classList.toggle("hidden", x !== id)
+  );
+}
+
+function esc(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function myId() {
+  return sessionStorage.getItem("tod_player_id");
+}
+
+function stopTimers() {
+  if (lobbySyncInterval) { clearInterval(lobbySyncInterval); lobbySyncInterval = null; }
+  if (gameSyncTimer) { clearInterval(gameSyncTimer); gameSyncTimer = null; }
+  if (proposalSyncTimer) { clearInterval(proposalSyncTimer); proposalSyncTimer = null; }
+  if (endSyncTimer) { clearInterval(endSyncTimer); endSyncTimer = null; }
+}
+
+function nickname() {
+  const n = $("nickname").value.trim();
+  if (!n) {
+    $("homeMsg").textContent = "Enter your Discord nickname to continue.";
+    return null;
+  }
+  if (n.length > 24) {
+    $("homeMsg").textContent = "Your nickname must be 24 characters or fewer.";
+    return null;
+  }
+  return n;
+}
+
+/* ------------------------------------------------------------------ */
+/* Lobby                                                               */
+/* ------------------------------------------------------------------ */
+
+async function createRoom() {
+  const n = nickname();
+  if (!n) return;
+
+  $("homeMsg").textContent = "Creating your room...";
+
+  const { data, error } = await supabaseClient.rpc("tod_create_room", {
+    p_nickname: n
+  });
+
+  if (error) {
+    console.error("Room creation error:", error);
+    $("homeMsg").textContent =
+      "Could not create the room: " + error.message;
+    return;
+  }
+
+  room = data.code;
+  me = n;
+  isHost = true;
+
+  // Keep these private tokens only in this browser session.
+  sessionStorage.setItem("tod_room_code", data.code);
+  sessionStorage.setItem("tod_player_id", data.player_id);
+  sessionStorage.setItem("tod_player_token", data.player_token);
+  sessionStorage.setItem("tod_host_token", data.host_token);
+
+  players = [{
+    id: data.player_id,
+    name: n,
+    host: true,
+    alive: true
+  }];
+
+  round = 0;
+  phase = "lobby";
+  lastViewKey = "";
+
+  renderLobby();
+  show("lobby");
+  startLobbySync();
+
+  $("lobbyMsg").textContent =
+    "Room created! Share this code with your friends.";
+}
+
+function showJoin() {
+  $("joinBox").classList.toggle("hidden");
+}
+
+async function joinRoom() {
+  const n = nickname();
+  if (!n) return;
+
+  const codeInput = $("joinCode").value.trim().toUpperCase();
+
+  if (!codeInput) {
+    $("homeMsg").textContent = "Enter a room code.";
+    return;
+  }
+
+  $("homeMsg").textContent = "Joining room...";
+
+  const { data, error } = await supabaseClient.rpc("tod_join_room", {
+    p_code: codeInput,
+    p_nickname: n
+  });
+
+  if (error) {
+    console.error("Join room error:", error);
+    $("homeMsg").textContent = error.message;
+    return;
+  }
+
+  room = data.code;
+  me = n;
+  isHost = false;
+
+  sessionStorage.setItem("tod_room_code", data.code);
+  sessionStorage.setItem("tod_player_id", data.player_id);
+  sessionStorage.setItem("tod_player_token", data.player_token);
+  sessionStorage.removeItem("tod_host_token");
+
+  players = [{
+    id: data.player_id,
+    name: n,
+    host: false,
+    alive: true
+  }];
+
+  round = 0;
+  phase = "lobby";
+  lastViewKey = "";
+
+  renderLobby();
+  show("lobby");
+  startLobbySync();
+
+  $("lobbyMsg").textContent =
+    "You joined the room! Waiting for the host.";
+}
+
+function renderLobby() {
+  $("roomCode").textContent = room;
+  $("playerCount").textContent = players.length + " player(s)";
+  $("lobbyPlayers").innerHTML = players.map(p =>
+    `<div class="player">✦ ${esc(p.name)}${p.host ? "<small>HOST</small>" : "<small>Player</small>"}</div>`
+  ).join("");
+
+  $("startBtn").disabled = players.length < 4;
+  $("lobbyMsg").textContent = players.length < 4
+    ? (4-players.length) + " more player(s) needed to start."
+    : "The room is ready!";
+}
+
+async function syncLobby() {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token || phase !== "lobby") return;
+
+  const { data, error } = await supabaseClient.rpc(
+    "tod_get_room_state",
+    {
+      p_code: code,
+      p_player_token: token
+    }
+  );
+
+  if (error) {
+    console.error("Lobby sync error:", error);
+    $("lobbyMsg").textContent = "Sync error: " + error.message;
+    return;
+  }
+
+  if (!data || !Array.isArray(data.players)) return;
+
+  players = data.players.map(p => ({
+    id: p.id,
+    name: p.nickname,
+    host: p.is_host,
+    alive: p.is_alive
+  }));
+
+  if (data.status === "playing") {
+    round = data.round_number || 1;
+    phase = data.game_phase || "draw";
+    lastViewKey = "";
+
+    show("game");
+    $("roundTag").textContent = "ROUND " + round;
+
+    startGameSync();
+    await syncGameState();
+    return;
+  }
+
+  renderLobby();
+}
+
+function startLobbySync() {
+  if (lobbySyncInterval) {
+    clearInterval(lobbySyncInterval);
+  }
+
+  syncLobby();
+
+  lobbySyncInterval = setInterval(() => {
+    if (phase === "lobby") {
+      syncLobby();
+    } else {
+      clearInterval(lobbySyncInterval);
+      lobbySyncInterval = null;
+    }
+  }, 2000);
+}
+
+function copyCode() {
+  if (!navigator.clipboard) {
+    alert("Room code: " + room);
+    return;
+  }
+  navigator.clipboard.writeText(room)
+    .then(() => alert("Room code copied: " + room))
+    .catch(() => alert("Room code: " + room));
+}
+
+async function startGame() {
+  if (!isHost) {
+    $("lobbyMsg").textContent = "Only the host can start the game.";
+    return;
+  }
+
+  if (players.filter(p => p.alive).length < 4) {
+    $("lobbyMsg").textContent =
+      "At least 4 players are required to start.";
+    return;
+  }
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token) {
+    $("lobbyMsg").textContent =
+      "Room session missing. Please rejoin the room.";
+    return;
+  }
+
+  $("lobbyMsg").textContent = "Starting game...";
+
+  const { data, error } = await supabaseClient.rpc(
+    "tod_start_game",
+    {
+      p_code: code,
+      p_player_token: token
+    }
+  );
+
+  if (error) {
+    console.error("Start game error:", error);
+    $("lobbyMsg").textContent =
+      "Could not start game: " + error.message;
+    return;
+  }
+
+  round = data.round_number;
+  selected = null;
+  kind = "";
+  phase = data.game_phase || "draw";
+  lastViewKey = "";
+
+  show("game");
+  startGameSync();
+  $("roundTag").textContent = "ROUND " + round;
+  $("gameTitle").textContent = "✦ The Elite Roulette";
+  $("gameMsg").textContent = "The lights are on... Who will be chosen?";
+  renderGamePlayers();
+
+  await syncGameState();
+}
+
+/* ------------------------------------------------------------------ */
+/* Game: one screen per phase, driven by the state stored in Supabase  */
+/* ------------------------------------------------------------------ */
+
+function startGameSync() {
+  if (gameSyncTimer) {
+    clearInterval(gameSyncTimer);
+  }
+
+  gameSyncTimer = setInterval(() => {
+    if (phase !== "lobby") {
+      syncGameState();
+    }
+  }, 1500);
+}
+
+// Re-renders the main area only when the key changed (so inputs, buttons
+// and the roulette are not wiped by the background polling).
+function setView(key, title, msg, html) {
+  if (key === lastViewKey) return false;
+  lastViewKey = key;
+  $("gameTitle").textContent = title;
+  $("gameMsg").textContent = msg;
+  $("turnArea").innerHTML = html;
+  return true;
+}
+
+// Calls a game function with the room code and my private token.
+// On error the message is shown under the title and null is returned.
+async function callGameRpc(name, extra) {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token) {
+    $("gameMsg").textContent = "Your room session is missing. Please rejoin.";
+    return null;
+  }
+
+  const { data, error } = await supabaseClient.rpc(
+    name,
+    Object.assign({ p_code: code, p_player_token: token }, extra || {})
+  );
+
+  if (error) {
+    console.error(name + " error:", error);
+    $("gameMsg").textContent = error.message;
+    return null;
+  }
+
+  return data || {};
+}
+
+function promptCardHtml(cp) {
+  return `
+    <div class="prompt">
+      <span class="tag">${esc(String(cp.prompt_type).toUpperCase())}</span>
+      <p style="font-size:19px">${esc(cp.prompt_text)}</p>
+      <p class="notice">Submitted by ${esc(cp.submitted_by)}</p>
+    </div>
+  `;
+}
+
+async function syncGameState() {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token || phase === "lobby" || syncing) return;
+
+  syncing = true;
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "tod_get_room_state",
+      {
+        p_code: code,
+        p_player_token: token
+      }
+    );
+
+    if (error) {
+      console.error("Game sync error:", error);
+      return;
+    }
+
+    if (!data) return;
+
+    players = (data.players || []).map(p => ({
+      id: p.id,
+      name: p.nickname,
+      host: p.is_host,
+      alive: p.is_alive
+    }));
+
+    round = data.round_number;
+    kind = data.selected_kind || "";
+    phase = data.game_phase || phase;
+    roomState = data;
+    drawPool = data.draw_pool || [];
+
+    selected = data.selected_player_id
+      ? players.find(p => p.id === data.selected_player_id) || null
+      : null;
+
+    if (data.status === "finished" || phase === "finished") {
+      finishGame(data);
+      return;
+    }
+
+    $("roundTag").textContent = "ROUND " + round;
+    renderGamePlayers();
+
+    if (phase === "draw") renderDrawPhase(data);
+    else if (phase === "spinning") renderSpinPhase(data);
+    else if (phase === "choice") renderChoicePhase(data);
+    else if (phase === "submit") renderSubmitPhase(data);
+    else if (phase === "top3") await renderTop3Phase(data);
+    else if (phase === "challenge") renderChallengePhase(data);
+    else if (phase === "vote") renderVotePhase(data);
+    else if (phase === "result") renderResultPhase(data);
+  } finally {
+    syncing = false;
+  }
+}
+
+// Everybody sees the same wheel: same players, same order (order of arrival).
+function wheelPlayers() {
+  return players.filter(p => drawPool.includes(p.id));
+}
+
+function wheelHtml(label) {
+  return `
+    <div class="wheel-wrap">
+      <div class="wheel-pointer">▼</div>
+      <div class="wheel" id="rouletteWheel">
+        <canvas id="wheelCanvas"></canvas>
+        <div class="wheel-center">ELITE</div>
+      </div>
+      <div class="wheel-result" id="wheelResult">${label}</div>
+      <div class="wheel-announce" id="wheelAnnounce" aria-live="polite"></div>
+    </div>
+  `;
+}
+
+// The wheel is visible to every player before it starts.
+// Only the host has the button that starts it.
+function renderDrawPhase(data) {
+  // The host just pressed the button: do not redraw until the spin starts.
+  if (spinPending) return;
+
+  const amHost = !!data.you.is_host;
+  const pool = wheelPlayers();
+
+  const changed = setView(
+    "draw|" + round + "|" + amHost + "|" + pool.map(p => p.id).join(","),
+    "✦ The Elite Roulette",
+    "The lights are on... Who will be chosen?",
+    wheelHtml("") + (
+      amHost
+        ? `<button id="spinBtn" class="primary" style="width:100%;padding:20px" onclick="drawPlayer()">✦ SPIN THE WHEEL ✦</button>`
+        : '<p class="notice" style="text-align:center">Waiting for the host to spin the wheel...</p>'
+    )
+  );
+
+  if (changed) drawWheel(pool.map(p => p.name));
+}
+
+// The server picks the player and starts the clock. Every screen animates the
+// same spin, and a screen that joins late starts with the time that is left.
+function renderSpinPhase(data) {
+  spinPending = false;
+  if (!selected) return;
+
+  const pool = wheelPlayers();
+  const key = ["spin", round, selected.id].join("|");
+
+  const changed = setView(
+    key,
+    "✦ ELITE ROULETTE ✦",
+    "The wheel is spinning...",
+    wheelHtml("GOOD LUCK")
+  );
+
+  const total = data.spin_duration_ms || 15000;
+
+  // Whatever happens below, the screen that sees the spin finish asks the
+  // server to continue (the server refuses if the time is not really up).
+  if ((data.spin_elapsed_ms || 0) >= total + 3800) finishSpin();
+
+  if (!changed) return;
+
+  drawWheel(pool.map(p => p.name));
+
+  const elapsed = Math.min(data.spin_elapsed_ms || 0, total);
+  const remaining = total - elapsed;
+
+  const winnerName = selected.name;
+  const winnerIndex = Math.max(0, pool.findIndex(p => p.id === selected.id));
+  const sliceDeg = 360 / Math.max(1, pool.length);
+  // Pointer is at the top. Rotate the winning segment to the pointer.
+  const segmentCenter = winnerIndex * sliceDeg + sliceDeg / 2;
+  const finalRotation = 360 * 9 + (360 - segmentCenter);
+
+  const wheel = $("rouletteWheel");
+  const result = $("wheelResult");
+  if (!wheel) return;
+
+  // The banner every player sees when the wheel stops.
+  const announce = () => {
+    const r = $("wheelResult");
+    const a = $("wheelAnnounce");
+    if (lastViewKey !== key) return;
+    if (r) r.textContent = "✦ " + winnerName + " ✦";
+    if (a && !a.firstChild) {
+      a.innerHTML = `<span><b>${esc(winnerName)}</b> has been selected!</span>`;
+      a.classList.add("show");
+    }
+  };
+
+  if (remaining <= 300) {
+    // The spin is already over: show the final position directly.
+    wheel.style.transition = "none";
+    wheel.style.transform = `rotate(${finalRotation}deg)`;
+    announce();
+    return;
+  }
+
+  void wheel.offsetWidth; // make sure the starting position is painted first
+  wheel.style.transition = `transform ${remaining}ms cubic-bezier(.12,.6,.1,1)`;
+  wheel.style.transform = `rotate(${finalRotation}deg)`;
+
+  setTimeout(announce, remaining);
+
+  // A pause on the winner's name so everybody can read it, then all move on.
+  setTimeout(() => {
+    if (lastViewKey === key) finishSpin();
+  }, remaining + 3500);
+}
+
+function renderChoicePhase(data) {
+  if (!selected) return;
+
+  const iAmSelected = selected.id === data.you.id;
+
+  setView(
+    "choice|" + round + "|" + selected.id,
+    "✦ " + selected.name + " ✦",
+    iAmSelected
+      ? "You're the chosen one. Truth or Dare?"
+      : selected.name + " is choosing Truth or Dare.",
+    iAmSelected
+      ? `
+        <div class="actions">
+          <button class="choice" onclick="chooseKind('Truth')">
+            <strong>☾</strong>TRUTH
+          </button>
+          <button class="choice" onclick="chooseKind('Dare')">
+            <strong>⚡</strong>DARE
+          </button>
+        </div>
+      `
+      : '<p class="notice">Waiting for the selected player...</p>'
+  );
+}
+
+function renderSubmitPhase(data) {
+  if (!selected) return;
+
+  const you = data.you;
+  const iAmSelected = selected.id === you.id;
+  const iAmManager = data.top3_manager_id === you.id;
+  // Only active players (not the selected one) write proposals.
+  const canPropose = !iAmSelected && you.is_alive;
+
+  let msg;
+  let html;
+
+  if (iAmSelected) {
+    msg = "Waiting for other players to submit their proposals...";
+    html = `
+      <p class="notice">
+        The other active players are preparing their proposals.
+        You will see the selected Top 3 when they are ready.
+      </p>
+    `;
+  } else if (canPropose) {
+    msg = iAmManager
+      ? "Submit your own proposal. You will choose the Top 3 once everyone has submitted."
+      : "Submit your own proposal. You can submit only once.";
+    html = `
+      <p class="notice">
+        Submit one ${kind === "Dare" ? "dare" : "truth question"}.
+      </p>
+      <label for="proposal">Your proposal</label>
+      <input id="proposal" maxlength="180"
+        placeholder="${kind === "Dare" ? "Write your dare..." : "Write your truth question..."}">
+      <button class="secondary"
+        style="width:100%;margin-top:10px"
+        onclick="submitProposal()">
+        Submit Proposal
+      </button>
+      <p id="proposalCount" class="notice">
+        Waiting for proposals...
+      </p>
+    `;
+  } else {
+    msg = iAmManager
+      ? "You will choose the Top 3 once everyone has submitted."
+      : "You are a spectator. You will be able to vote on the challenge.";
+    html = `
+      <p class="notice">
+        The active players are preparing their proposals.
+      </p>
+    `;
+  }
+
+  const changed = setView(
+    ["submit", round, selected.id, kind, canPropose, iAmManager].join("|"),
+    selected.name + " chooses: " + kind,
+    msg,
+    html
+  );
+
+  if (changed) {
+    proposalSent = false;
+    top3SelectedIds.clear();
+  }
+
+  if (!proposalSyncTimer) startProposalSync();
+}
+
+async function renderTop3Phase(data) {
+  if (!selected) return;
+
+  const iAmSelected = selected.id === data.you.id;
+  const attemptNo = data.attempt_number || 0;
+  const key = ["top3", round, selected.id, attemptNo, iAmSelected].join("|");
+
+  if (key === lastViewKey) return;
+
+  if (!iAmSelected) {
+    setView(
+      key,
+      "✦ TOP 3 SELECTED ✦",
+      selected.name + " is choosing a proposal (attempt " + (attemptNo + 1) + " of 3).",
+      '<p class="notice">Waiting for the selected player...</p>'
+    );
+    return;
+  }
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  const { data: top, error } = await supabaseClient.rpc(
+    "tod_get_top_three",
+    {
+      p_code: code,
+      p_player_token: token
+    }
+  );
+
+  if (error) {
+    console.error("Get Top 3 error:", error);
+    $("gameMsg").textContent = error.message;
+    return;
+  }
+
+  const prompts = top.prompts || [];
+  const left = prompts.length;
+
+  const subtitle = attemptNo === 0
+    ? "Three proposals made it to the final. Choose the one you want to take on."
+    : "That challenge was rejected by the vote. " + left + " proposals are left. Choose the next one.";
+
+  const html = `
+    <div class="challenge-pick-wrap">
+      <div class="challenge-pick-eyebrow">ELITE LEADERS · FINAL SELECTION</div>
+      <div class="challenge-pick-title">PICK YOUR <span>CHALLENGE</span></div>
+      <p class="challenge-pick-subtitle">${esc(subtitle)}</p>
+      <div class="challenge-pick-list">
+        ${prompts.map((p, i) => `
+          <article class="challenge-pick-card" role="button" tabindex="0" data-pick-id="${esc(p.id)}">
+            <div class="challenge-pick-index">0${i + 1}</div>
+            <div class="challenge-pick-content">
+              <div class="challenge-pick-label">FINALIST ${String(i + 1).padStart(2, '0')}</div>
+              <div class="challenge-pick-text">${esc(p.prompt_text)}</div>
+            </div>
+            <div class="challenge-pick-mark">✦</div>
+          </article>
+        `).join("")}
+      </div>
+      <div class="challenge-pick-footer"><span>ATTEMPT ${attemptNo + 1} / 3</span><span>ELITE EDITION</span></div>
+    </div>
+  `;
+
+  setView(key, "✦ YOUR TOP " + left + " ✦", "Click a proposal to take it on.", html);
+}
+
+function renderChallengePhase(data) {
+  const cp = data.current_prompt;
+  if (!cp || !selected) return;
+
+  const you = data.you;
+  const iAmSelected = selected.id === you.id;
+  const attemptNo = data.attempt_number || 0;
+
+  let extra;
+  if (iAmSelected) {
+    extra = `
+      <p class="notice">It's your turn. When you are done, press the button: all players will then vote.</p>
+      <button class="primary" style="width:100%" onclick="openVote()">I'm done — open the vote</button>
+    `;
+  } else if (you.is_host) {
+    extra = `
+      <p class="notice">${esc(selected.name)} is on it. Open the vote once they are done.</p>
+      <button class="secondary" style="width:100%" onclick="openVote()">Open the vote</button>
+    `;
+  } else {
+    extra = `<p class="notice">Waiting for ${esc(selected.name)} to complete the challenge...</p>`;
+  }
+
+  setView(
+    ["challenge", round, cp.id, iAmSelected, !!you.is_host].join("|"),
+    selected.name + ": " + cp.prompt_type,
+    "Attempt " + (attemptNo + 1) + " of 3",
+    promptCardHtml(cp) + extra
+  );
+}
+
+function renderVotePhase(data) {
+  const cp = data.current_prompt;
+  if (!cp || !selected) return;
+
+  const you = data.you;
+  const iAmSelected = selected.id === you.id;
+  const canVote = !iAmSelected;
+  const voted = !!data.i_voted;
+  const isCloser = data.vote_closer_id === you.id;
+
+  let msg;
+  if (iAmSelected) msg = "The players are voting on your performance...";
+  else if (voted) msg = "Your vote is registered. Waiting for the others...";
+  else if (!you.is_alive) msg = "Was the challenge completed? You can vote as a spectator.";
+  else msg = "Was the challenge completed? Vote now.";
+
+  let html = promptCardHtml(cp) + `<p id="voteCount" class="vote-count"></p>`;
+
+  if (canVote && !voted) {
+    html += `
+      <div class="actions">
+        <button class="secondary" onclick="castVote(true)">✓ Accepted</button>
+        <button class="danger" onclick="castVote(false)">✕ Rejected</button>
+      </div>
+    `;
+  }
+
+  if (isCloser) {
+    html += `
+      <button class="secondary" style="width:100%;margin-top:14px" onclick="closeVote()">Close the vote now</button>
+      <p class="notice">The majority decides. A tie counts as accepted.</p>
+    `;
+  } else {
+    html += `<p class="notice">The majority decides. A tie counts as accepted.</p>`;
+  }
+
+  setView(
+    ["vote", round, cp.id, canVote, voted, isCloser, !!you.is_alive].join("|"),
+    selected.name + ": " + cp.prompt_type,
+    msg,
+    html
+  );
+
+  const vc = $("voteCount");
+  if (vc) vc.textContent = (data.vote_count || 0) + " / " + (data.vote_total || 0) + " votes";
+}
+
+function renderResultPhase(data) {
+  if (!selected) return;
+
+  const you = data.you;
+  const result = data.last_result;
+  const yes = data.last_yes || 0;
+  const no = data.last_no || 0;
+  const aliveCount = players.filter(p => p.alive).length;
+  const gameOver = result !== "rejected" && aliveCount <= 3;
+
+  let title;
+  let msg;
+
+  if (result === "accepted") {
+    title = "✦ CHALLENGE ACCEPTED ✦";
+    msg = selected.name + " has qualified for the next round.";
+  } else if (result === "rejected") {
+    title = "Challenge Rejected";
+    msg = "The majority rejected it. " + selected.name + " must take on another proposal.";
+  } else {
+    title = "Player Eliminated";
+    msg = selected.name + " has been eliminated and is now a spectator.";
+  }
+
+  if (gameOver) {
+    msg += " Only " + aliveCount + " players remain: the game is over.";
+  }
+
+  const label = result === "rejected"
+    ? "Next proposal →"
+    : (gameOver ? "Final results →" : "Next round →");
+
+  const html = `
+    <div class="tally">
+      <span>✓ ${yes} accepted</span>
+      <span>✕ ${no} rejected</span>
+    </div>
+    ${you.is_host
+      ? `<button class="primary" style="width:100%;margin-top:16px" onclick="continueGame()">${label}</button>`
+      : '<p class="notice" style="text-align:center">Waiting for the host to continue...</p>'}
+  `;
+
+  setView(
+    ["result", round, result, data.attempt_number, !!you.is_host, aliveCount].join("|"),
+    title,
+    msg,
+    html
+  );
+}
+
+function finishGame(data) {
+  stopTimers();
+
+  const alive = players.filter(p => p.alive);
+
+  $("winners").textContent = alive.length
+    ? "Winners: " + alive.map(p => p.name).join(", ")
+    : "No winners.";
+
+  // Leaderboard: winners first (most challenges passed), then the eliminated
+  // players, the last one eliminated ranking highest.
+  const board = (data && data.leaderboard) || [];
+  const mine = myId();
+  const medal = ["🥇", "🥈", "🥉"];
+
+  $("leaderboard").innerHTML = board.map(row => {
+    const n = row.successes || 0;
+    const detail = n + (n === 1 ? " challenge passed" : " challenges passed");
+    const rankLabel = row.rank <= 3 && row.is_alive ? medal[row.rank - 1] : "#" + row.rank;
+
+    return `
+      <div class="board-row ${row.is_alive ? "top" : ""} ${row.id === mine ? "me" : ""}">
+        <div class="board-rank">${rankLabel}</div>
+        <div class="board-name">${esc(row.nickname)}${row.is_host ? ' <span class="tag">HOST</span>' : ""}${row.id === mine ? " (you)" : ""}
+          <small>${detail}</small>
+        </div>
+        <span class="board-badge ${row.is_alive ? "win" : "out"}">${row.is_alive ? "CHAMPION" : "ELIMINATED"}</span>
+      </div>
+    `;
+  }).join("");
+
+  // Only the host can start a new game; the others wait on this screen and
+  // are taken back to the waiting room automatically.
+  const amHost = !!(data && data.you && data.you.is_host);
+  $("playAgainBox").innerHTML = amHost
+    ? `<button id="playAgainBtn" class="primary" style="width:100%" onclick="playAgain()">↻ Play Again</button>
+       <p class="notice">Everybody goes back to the waiting room with the same room code.</p>`
+    : '<p class="notice">Waiting for the host to start a new game...</p>';
+
+  show("end");
+  startEndSync();
+}
+
+// While the final screen is open, watch the room: when the host restarts,
+// everybody returns to the waiting room.
+function startEndSync() {
+  if (endSyncTimer) clearInterval(endSyncTimer);
+  endSyncTimer = setInterval(syncEnd, 2000);
+}
+
+async function syncEnd() {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+  if (!code || !token) return;
+
+  const { data, error } = await supabaseClient.rpc("tod_get_room_state", {
+    p_code: code,
+    p_player_token: token
+  });
+
+  if (error || !data || data.status !== "waiting") return;
+
+  if (endSyncTimer) { clearInterval(endSyncTimer); endSyncTimer = null; }
+
+  // Clean local state, then go back to the waiting room.
+  players = (data.players || []).map(p => ({
+    id: p.id,
+    name: p.nickname,
+    host: p.is_host,
+    alive: p.is_alive
+  }));
+  round = 0;
+  selected = null;
+  kind = "";
+  roomState = null;
+  drawPool = [];
+  lastViewKey = "";
+  proposalSent = false;
+  spinPending = false;
+  top3SelectedIds.clear();
+  phase = "lobby";
+
+  renderLobby();
+  show("lobby");
+  startLobbySync();
+}
+
+// Host only: reset the room, then everybody is taken back to the waiting room.
+async function playAgain() {
+  const btn = $("playAgainBtn");
+  if (btn) btn.disabled = true;
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  const { error } = await supabaseClient.rpc("tod_restart_game", {
+    p_code: code,
+    p_player_token: token
+  });
+
+  if (error) {
+    console.error("Restart error:", error);
+    alert("Could not restart the game: " + error.message);
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  await syncEnd();
+}
+
+function renderGamePlayers() {
+  // The chosen player stays secret until the wheel stops.
+  const selId = selected && phase !== "spinning" ? selected.id : null;
+
+  $("gamePlayers").innerHTML = players.map(p => `
+    <div class="player">${esc(p.name)}${p.host ? ' <span class="tag">HOST</span>' : ""}
+      <small>${p.alive ? (p.id === selId ? "✦ Selected" : "Active") : "Eliminated · Spectator"}</small>
+    </div>
+  `).join("");
+
+  $("aliveCount").textContent =
+    players.filter(p => p.alive).length + " active players";
+}
+
+/* ------------------------------------------------------------------ */
+/* Roulette                                                            */
+/* ------------------------------------------------------------------ */
+
+function drawWheel(names) {
+  const canvas = $("wheelCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const size = 700;
+  canvas.width = size;
+  canvas.height = size;
+  const cx = size / 2, cy = size / 2, radius = size / 2;
+  const colors = ["#6d35a8","#38205c","#a34ee8","#54277e","#8c43bd","#29183f"];
+  const slice = (Math.PI * 2) / names.length;
+
+  names.forEach((name, i) => {
+    const a0 = -Math.PI / 2 + i * slice;
+    const a1 = a0 + slice;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, a0, a1);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = "#e4c5ff";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a0 + slice / 2);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 27px Arial";
+    let label = String(name);
+    if (label.length > 18) label = label.slice(0, 16) + "…";
+    ctx.fillText(label, radius - 28, 0);
+    ctx.restore();
+  });
+}
+
+async function drawPlayer() {
+  if (phase !== "draw" || spinPending) return;
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token || !isHost) {
+    $("gameMsg").textContent = "Only the host can spin the wheel.";
+    return;
+  }
+
+  if (!wheelPlayers().length) {
+    $("gameMsg").textContent = "No players are available for the draw.";
+    return;
+  }
+
+  // The server chooses the winner and starts the shared spin. Every screen,
+  // including mine, then animates it from the room state.
+  spinPending = true;
+  const btn = $("spinBtn");
+  if (btn) btn.disabled = true;
+
+  const { error } = await supabaseClient.rpc("tod_draw_player", {
+    p_code: code,
+    p_player_token: token
+  });
+
+  if (error) {
+    console.error("Draw error:", error);
+    spinPending = false;
+    if (btn) btn.disabled = false;
+    alert("Could not spin: " + error.message);
+    return;
+  }
+
+  await syncGameState();
+}
+
+// Called when the spin is over: the server moves everybody to the choice screen.
+let finishingSpin = false;
+
+async function finishSpin() {
+  if (finishingSpin) return;
+  finishingSpin = true;
+
+  try {
+    const res = await callGameRpc("tod_finish_spin");
+    if (res) {
+      lastViewKey = "";
+      await syncGameState();
+    }
+  } finally {
+    finishingSpin = false;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Player actions                                                      */
+/* ------------------------------------------------------------------ */
+
+async function chooseKind(k) {
+  if (phase !== "choice" || !selected) return;
+
+  if (selected.id !== myId()) {
+    $("gameMsg").textContent = "Only the selected player can choose.";
+    return;
+  }
+
+  document.querySelectorAll(".choice").forEach(b => b.disabled = true);
+  $("gameMsg").textContent = "Saving your choice...";
+
+  const res = await callGameRpc("tod_choose_kind", { p_kind: k });
+
+  if (!res) {
+    document.querySelectorAll(".choice").forEach(b => b.disabled = false);
+    return;
+  }
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+async function submitProposal() {
+  const value = $("proposal")?.value.trim();
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!value) {
+    alert("Write your proposal before submitting it.");
+    return;
+  }
+
+  if (!code || !token) {
+    alert("Your room session is missing. Please rejoin.");
+    return;
+  }
+
+  const button = document.querySelector(
+    '#turnArea button[onclick="submitProposal()"]'
+  );
+
+  if (button) button.disabled = true;
+
+  const { error } = await supabaseClient.rpc(
+    "tod_submit_prompt",
+    {
+      p_code: code,
+      p_player_token: token,
+      p_prompt_text: value
+    }
+  );
+
+  if (error) {
+    console.error("Submit proposal error:", error);
+    alert("Could not submit: " + error.message);
+    if (button) button.disabled = false;
+    return;
+  }
+
+  proposalSent = true;
+
+  const input = $("proposal");
+  if (input) input.disabled = true;
+
+  if (button) button.textContent = "Proposal submitted";
+
+  $("gameMsg").textContent =
+    "Your proposal has been submitted. Waiting for the others...";
+
+  if ($("proposalCount")) {
+    $("proposalCount").textContent = "Proposal submitted successfully.";
+  }
+}
+
+function updateTop3Selection(changedInput) {
+  // Keep the selection in memory, not only in the DOM. Polling/re-rendering
+  // can rebuild the cards without losing the manager's choices.
+  if (changedInput) {
+    const id = String(changedInput.value);
+    if (changedInput.checked) {
+      if (top3SelectedIds.size >= 3) {
+        changedInput.checked = false;
+        alert("You can select only 3 proposals.");
+        return;
+      }
+      top3SelectedIds.add(id);
+    } else {
+      top3SelectedIds.delete(id);
+    }
+  }
+  document.querySelectorAll(".topThreeChoice").forEach(input => {
+    input.checked = top3SelectedIds.has(String(input.value));
+    input.disabled = !input.checked && top3SelectedIds.size >= 3;
+  });
+  const count = top3SelectedIds.size;
+  const countLabel = $("top3Count");
+  const confirmButton = $("confirmTop3Btn");
+  if (countLabel) countLabel.textContent = `${count} / 3 SELECTED`;
+  if (confirmButton) confirmButton.disabled = count !== 3;
+}
+
+async function selectTopThree() {
+  const selectedIds = Array.from(top3SelectedIds);
+
+  if (selectedIds.length !== 3) {
+    alert("You must select exactly 3 proposals.");
+    return;
+  }
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  const { error } = await supabaseClient.rpc(
+    "tod_select_top_three",
+    {
+      p_code: code,
+      p_player_token: token,
+      p_prompt_ids: selectedIds
+    }
+  );
+
+  if (error) {
+    console.error("Top 3 selection error:", error);
+    alert(error.message);
+    return;
+  }
+
+  top3SelectedIds.clear();
+  $("gameMsg").textContent =
+    "Top 3 successfully selected!";
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+async function syncProposalProgress() {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  if (!code || !token || phase !== "submit") return;
+
+  const { data, error } = await supabaseClient.rpc(
+    "tod_get_prompt_progress",
+    {
+      p_code: code,
+      p_player_token: token
+    }
+  );
+
+  if (error) {
+    console.error("Proposal progress error:", error);
+    return;
+  }
+
+  if (!data || phase !== "submit") return;
+
+  const complete = data.total > 0 && data.submitted >= data.total;
+
+  const counter = $("proposalCount");
+  if (counter) {
+    counter.textContent = complete
+      ? "All proposals received! Submission round complete."
+      : (proposalSent ? "✓ Proposal submitted — " : "") +
+        data.submitted + " / " + data.total + " proposals submitted";
+  }
+
+  if (complete) {
+    $("gameMsg").textContent = data.is_manager
+      ? "All proposals received. Choose the Top 3 below."
+      : "All players have submitted. Waiting for the Top 3 selection...";
+  }
+
+  // Only the player who manages the Top 3 sees all the proposals.
+  if (data.is_manager && Array.isArray(data.prompts)) {
+    if (!$("hostPromptList")) {
+      const list = document.createElement("div");
+      list.id = "hostPromptList";
+      list.className = "notice";
+      $("turnArea").appendChild(list);
+    }
+
+    const promptList = $("hostPromptList");
+
+    if (complete) {
+      // Build the checkboxes only once. Rebuilding them every poll erased selections.
+      if (promptList.dataset.ready !== "true") {
+        promptList.innerHTML = `
+          <div class="top3-shell">
+            <div class="top3-heading">
+              <div>
+                <div class="top3-kicker">ELITE LEADERS · CHALLENGE DRAFTS</div>
+                <div class="top3-title">Build the Top 3</div>
+              </div>
+              <div class="top3-count" id="top3Count">0 / 3 SELECTED</div>
+            </div>
+            <p class="top3-help">Review every submission and choose exactly three challenges for the selected player.</p>
+            <div class="top3-list">
+              ${data.prompts.map((p, i) => `
+                <label class="top3-option">
+                  <input type="checkbox" class="topThreeChoice"
+                    value="${esc(p.id)}" ${top3SelectedIds.has(String(p.id)) ? "checked" : ""}
+                    onchange="updateTop3Selection(this)">
+                  <span class="top3-option-copy">
+                    <span class="top3-option-meta">
+                      <span class="top3-option-number">PROPOSAL ${String(i + 1).padStart(2, '0')}</span>
+                      <span class="top3-selected-tag">SELECTED</span>
+                    </span>
+                    <span class="top3-option-text">${esc(p.prompt_text)}</span>
+                  </span>
+                </label>
+              `).join("")}
+            </div>
+            <button id="confirmTop3Btn" class="top3-confirm" onclick="selectTopThree()" disabled>
+              CONFIRM TOP 3 <span aria-hidden="true">→</span>
+            </button>
+            <p class="top3-footnote">Select 3 proposals to unlock confirmation.</p>
+          </div>
+        `;
+        promptList.dataset.ready = "true";
+        updateTop3Selection();
+      }
+    } else {
+      promptList.dataset.ready = "false";
+      top3SelectedIds.clear();
+      promptList.innerHTML = `
+        <p>${data.submitted} / ${data.total} proposals submitted</p>
+        <p>Waiting for all players...</p>
+      `;
+    }
+  }
+}
+
+function startProposalSync() {
+  if (proposalSyncTimer) clearInterval(proposalSyncTimer);
+
+  syncProposalProgress();
+
+  proposalSyncTimer = setInterval(() => {
+    if (phase === "submit") {
+      syncProposalProgress();
+    } else {
+      clearInterval(proposalSyncTimer);
+      proposalSyncTimer = null;
+    }
+  }, 1500);
+}
+
+// The selected player clicks one of the remaining Top 3 cards.
+let picking = false;
+
+async function pickPrompt(id) {
+  if (picking || !id) return;
+  picking = true;
+
+  const cards = document.querySelectorAll(".challenge-pick-card");
+  cards.forEach(c => c.classList.add("busy"));
+  $("gameMsg").textContent = "Saving your choice...";
+
+  try {
+    const res = await callGameRpc("tod_pick_prompt", { p_prompt_id: id });
+
+    if (!res) {
+      // callGameRpc already put the error text under the title.
+      cards.forEach(c => c.classList.remove("busy"));
+      alert("Could not pick this challenge: " + $("gameMsg").textContent);
+      return;
+    }
+
+    lastViewKey = "";
+    await syncGameState();
+  } finally {
+    picking = false;
+  }
+}
+
+// One click listener for all the cards (works on the whole card, on mobile too).
+$("turnArea").addEventListener("click", e => {
+  const card = e.target.closest("[data-pick-id]");
+  if (card) pickPrompt(card.dataset.pickId);
+});
+
+$("turnArea").addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest("[data-pick-id]");
+  if (card) {
+    e.preventDefault();
+    pickPrompt(card.dataset.pickId);
+  }
+});
+
+// The challenge is done: open the vote.
+async function openVote() {
+  document.querySelectorAll("#turnArea button").forEach(b => b.disabled = true);
+
+  const res = await callGameRpc("tod_open_vote");
+
+  if (!res) {
+    document.querySelectorAll("#turnArea button").forEach(b => b.disabled = false);
+    return;
+  }
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+async function castVote(accepted) {
+  document.querySelectorAll("#turnArea .actions button").forEach(b => b.disabled = true);
+
+  const res = await callGameRpc("tod_cast_vote", { p_accepted: accepted });
+
+  if (!res) {
+    document.querySelectorAll("#turnArea .actions button").forEach(b => b.disabled = false);
+    return;
+  }
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+async function closeVote() {
+  const res = await callGameRpc("tod_close_vote");
+  if (!res) return;
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+// Host only: go to the next proposal, the next round, or the final screen.
+async function continueGame() {
+  document.querySelectorAll("#turnArea button").forEach(b => b.disabled = true);
+
+  const res = await callGameRpc("tod_continue");
+
+  if (!res) {
+    document.querySelectorAll("#turnArea button").forEach(b => b.disabled = false);
+    return;
+  }
+
+  lastViewKey = "";
+  await syncGameState();
+}
+
+function goHome() {
+  stopTimers();
+  SESSION_KEYS.forEach(k => sessionStorage.removeItem(k));
+
+  room = null;
+  me = null;
+  isHost = false;
+  players = [];
+  round = 0;
+  selected = null;
+  kind = "";
+  roomState = null;
+  drawPool = [];
+  lastViewKey = "";
+  proposalSent = false;
+  top3SelectedIds.clear();
+  phase = "lobby";
+  $("nickname").value = "";
+  $("joinCode").value = "";
+  $("homeMsg").textContent = "";
+
+  show("home");
+}
+</script>
+</body>
+</html>
+
 $('hostNextArea').classList.toggle('hidden',!(isHost&&!!room.chosen_prompt_id));$('nextRoundBtn').disabled=!(isHost&&!!room.chosen_prompt_id);$('nextRoundBtn').textContent='TOUR SUIVANT';}
 async function refresh(){if(!roomCode)return;try{const {data,error}=await rpc('tod_get_state',{p_code:roomCode});if(error)throw error;if(!data||!data.room)throw new Error('Partie introuvable.');render(data)}catch(e){msg('roomStatus','Connexion : '+e.message)}}
 const params=new URLSearchParams(location.search),prefill=params.get('room');if(prefill){const code=prefill.toUpperCase(),savedPlayer=sessionStorage.getItem('tod_player_'+code),savedHost=sessionStorage.getItem('tod_host_'+code);if(savedPlayer){roomCode=code;playerId=savedPlayer;hostPin=savedHost||null;isHost=!!savedHost;setRoomView()}else{$('joinCode').value=code;$('joinName').focus()}}
