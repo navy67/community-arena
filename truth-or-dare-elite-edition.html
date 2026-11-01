@@ -87,6 +87,48 @@ hr{border:0;border-top:1px solid #ffffff14;margin:18px 0}
 .board-badge.win{color:#1d0f33;background:#e3c1ff}
 .board-badge.out{color:#d9a7b8;border:1px solid #70394f}
 
+/* Leave / kick buttons */
+.kick-btn{display:block;margin-top:9px;padding:6px 10px;font-size:11px;border-radius:8px;
+  background:#512039;color:#ffd7e5;border:1px solid #7a3552}
+.leave-btn{padding:8px 12px;font-size:12px;border-radius:10px;background:#251833;
+  border:1px solid var(--border);color:#e8d6ff}
+
+/* Background music player (bottom-right corner) */
+.music-dock{position:fixed;right:14px;bottom:14px;z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.music-btn{width:50px;height:50px;padding:0;border-radius:50%;font-size:22px;line-height:1;
+  background:linear-gradient(135deg,#8b42f5,#d16dff);color:#fff;box-shadow:0 8px 28px #0009,0 0 22px #a34aff55}
+.music-btn.off{background:#2b1b3c;color:#a99bbd;box-shadow:0 8px 28px #0009}
+.music-btn.playing{animation:musicPulse 2.4s ease-in-out infinite}
+@keyframes musicPulse{0%,100%{box-shadow:0 8px 28px #0009,0 0 14px #a34aff55}50%{box-shadow:0 8px 28px #0009,0 0 30px #d16dffaa}}
+.music-panel{width:min(260px,calc(100vw - 28px));padding:14px;border-radius:16px;border:1px solid var(--border);
+  background:linear-gradient(145deg,#1f1330f2,#130c1df2);box-shadow:0 14px 40px #000a;backdrop-filter:blur(8px)}
+.music-label{font-size:10px;letter-spacing:2px;font-weight:900;color:#c5a7ff}
+.music-title{margin:6px 0 12px;font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.music-controls{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
+.music-controls button{width:42px;height:42px;padding:0;border-radius:12px;font-size:17px;background:#251833;border:1px solid var(--border);color:#fff}
+.music-panel input[type=range]{width:100%;padding:0;border:0;background:transparent;accent-color:#b06cff;cursor:pointer}
+/* Personal music: list and add controls */
+.music-panel{max-height:calc(100vh - 100px);overflow-y:auto}
+.music-note{color:#8e8ba4;font-weight:700;letter-spacing:0}
+.music-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin:8px 0 10px;max-height:150px;overflow-y:auto}
+.music-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid #3a2a4d;background:#22152f;cursor:pointer;font-size:13px}
+.music-item.cur{border-color:#a98bff;background:linear-gradient(110deg,#33204f,#241535)}
+.music-item .mi-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.music-item .mi-tag{font-size:10px;color:#8e8ba4}
+.music-item .mi-x{width:26px;height:26px;padding:0;border-radius:8px;font-size:12px;background:#512039;color:#ffd7e5}
+.music-empty{font-size:12px;color:var(--muted);padding:6px 2px}
+.music-panel input.music-text{padding:10px 12px;font-size:13px;border-radius:10px}
+.music-add{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.music-small{padding:9px 4px;font-size:12px;border-radius:10px;background:#251833;border:1px solid var(--border);color:#fff}
+.music-msg{font-size:11px;line-height:1.55;color:var(--muted);margin:9px 0 0}
+.music-msg.err{color:#ffb4c8}
+.music-results{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin-top:10px}
+.music-results-label{font-size:10px;letter-spacing:1.5px;font-weight:900;color:#8e8ba4}
+.music-result{padding:8px 10px;border:1px solid #3a2a4d;background:#22152f;border-radius:10px;font-size:12px;cursor:pointer;line-height:1.35}
+.music-result:hover{border-color:#a98bff}
+.music-result small{display:block;color:#8e8ba4;margin-top:2px}
+
+
 
 /* ELITE DRAFT ROOM — new Top 3 visual direction */
 .top3-shell{margin-top:24px;padding:22px;border:1px solid #344653;border-radius:12px;background:linear-gradient(145deg,#111d27,#0b121a);box-shadow:0 20px 55px #0008;position:relative;overflow:hidden}
@@ -195,7 +237,7 @@ hr{border:0;border-top:1px solid #ffffff14;margin:18px 0}
     <div id="lobbyPlayers" class="players"></div>
     <p class="notice">At least 4 real players must join using the room code before the host can start.</p>
     <button id="startBtn" class="primary" style="width:100%;margin-top:12px" onclick="startGame()">Start Game</button>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="goHome()">Leave Room</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="leaveRoom()">Leave Room</button>
     <p id="lobbyMsg" class="notice" aria-live="polite"></p>
   </div>
 </section>
@@ -205,6 +247,7 @@ hr{border:0;border-top:1px solid #ffffff14;margin:18px 0}
     <div class="row">
       <span class="tag" id="roundTag">ROUND 1</span>
       <span id="aliveCount" class="status"></span>
+      <button class="leave-btn" onclick="leaveRoom()">⎋ Leave game</button>
     </div>
     <h2 id="gameTitle" style="margin-top:18px">The draw is about to begin...</h2>
     <p id="gameMsg" class="subtitle"></p>
@@ -224,12 +267,41 @@ hr{border:0;border-top:1px solid #ffffff14;margin:18px 0}
     <div class="eyebrow" style="margin:22px 0 0">FINAL LEADERBOARD</div>
     <div id="leaderboard" class="board"></div>
     <div id="playAgainBox"></div>
-    <button class="secondary" style="width:100%;margin-top:10px" onclick="goHome()">Back to Home</button>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="leaveRoom()">Leave &amp; Back to Home</button>
   </div>
 </section>
 </main>
 
 <footer>ELITE LEADERS COMMUNITY · TRUTH OR DARE ELITE EDITION</footer>
+
+<!-- Personal music player: each player adds their own music, only they hear it -->
+<div id="ytHostWrap" style="position:fixed;left:-320px;top:0;width:200px;height:200px;overflow:hidden;opacity:0;pointer-events:none" aria-hidden="true"><div id="ytHost"></div></div>
+<div id="musicDock" class="music-dock">
+  <div id="musicPanel" class="music-panel hidden">
+    <div class="music-label">NOW PLAYING</div>
+    <div id="musicTitle" class="music-title">Add your own music below</div>
+    <div class="music-controls">
+      <button id="musicPrev" aria-label="Previous track">⏮</button>
+      <button id="musicPlay" aria-label="Play or pause">⏸</button>
+      <button id="musicNext" aria-label="Next track">⏭</button>
+    </div>
+    <input id="musicVol" type="range" min="0" max="100" value="35" aria-label="Volume">
+
+    <div class="music-label" style="margin-top:16px">MY MUSIC <span class="music-note">· only you hear it</span></div>
+    <div id="musicList" class="music-list"></div>
+
+    <input id="musicLink" type="text" class="music-text" placeholder="Song name, or paste a link" autocomplete="off">
+    <div class="music-add">
+      <button id="musicAdd" class="music-small">＋ Add link</button>
+      <button id="musicSearch" class="music-small">🔎 Search</button>
+      <button id="musicFileBtn" class="music-small">📁 Files</button>
+    </div>
+    <div id="musicResults" class="music-results hidden"></div>
+    <input id="musicFiles" type="file" accept="audio/*" multiple class="hidden">
+    <p id="musicMsg" class="music-msg">Search opens YouTube: copy the link of the song you like, paste it above, then press Add link.</p>
+  </div>
+  <button id="musicToggle" class="music-btn" aria-label="Music">♫</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -410,7 +482,7 @@ function renderLobby() {
   $("roomCode").textContent = room;
   $("playerCount").textContent = players.length + " player(s)";
   $("lobbyPlayers").innerHTML = players.map(p =>
-    `<div class="player">✦ ${esc(p.name)}${p.host ? "<small>HOST</small>" : "<small>Player</small>"}</div>`
+    `<div class="player">✦ ${esc(p.name)}${p.host ? "<small>HOST</small>" : "<small>Player</small>"}${kickBtn(p)}</div>`
   ).join("");
 
   $("startBtn").disabled = players.length < 4;
@@ -435,6 +507,7 @@ async function syncLobby() {
 
   if (error) {
     console.error("Lobby sync error:", error);
+    if (handleGone(error)) return;
     $("lobbyMsg").textContent = "Sync error: " + error.message;
     return;
   }
@@ -626,6 +699,7 @@ async function syncGameState() {
 
     if (error) {
       console.error("Game sync error:", error);
+      if (handleGone(error)) return;
       return;
     }
 
@@ -1130,6 +1204,7 @@ async function syncEnd() {
     p_player_token: token
   });
 
+  if (error && handleGone(error)) return;
   if (error || !data || data.status !== "waiting") return;
 
   if (endSyncTimer) { clearInterval(endSyncTimer); endSyncTimer = null; }
@@ -1187,6 +1262,7 @@ function renderGamePlayers() {
   $("gamePlayers").innerHTML = players.map(p => `
     <div class="player">${esc(p.name)}${p.host ? ' <span class="tag">HOST</span>' : ""}
       <small>${p.alive ? (p.id === selId ? "✦ Selected" : "Active") : "Eliminated · Spectator"}</small>
+      ${kickBtn(p)}
     </div>
   `).join("");
 
@@ -1447,6 +1523,7 @@ async function syncProposalProgress() {
 
   if (error) {
     console.error("Proposal progress error:", error);
+    if (handleGone(error)) return;
     return;
   }
 
@@ -1638,6 +1715,81 @@ async function continueGame() {
   await syncGameState();
 }
 
+/* ------------------------------------------------------------------ */
+/* Leave the game / kick a player                                      */
+/* ------------------------------------------------------------------ */
+
+// The "Kick" button is shown to the host, on every player except the host.
+function kickBtn(p) {
+  if (!isHost || p.host) return "";
+  return `<button class="kick-btn" onclick="kickPlayer('${esc(p.id)}')">✕ Kick</button>`;
+}
+
+// A polling call fails with one of these messages when this player was removed
+// from the room, or when the host closed the room.
+function handleGone(error) {
+  const m = (error && error.message) || "";
+
+  if (/Invalid room code or player token|Invalid player session|Room not found/i.test(m)) {
+    goHome();
+    $("homeMsg").textContent =
+      "You are no longer in this room: you were removed, or the host closed it.";
+    return true;
+  }
+
+  return false;
+}
+
+async function leaveRoom() {
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  const ok = confirm(
+    isHost
+      ? "You are the host: leaving closes the room for everybody. Leave anyway?"
+      : "Leave this game?"
+  );
+  if (!ok) return;
+
+  stopTimers();
+
+  if (code && token) {
+    await supabaseClient.rpc("tod_leave_room", {
+      p_code: code,
+      p_player_token: token
+    });
+  }
+
+  goHome();
+}
+
+async function kickPlayer(id) {
+  const target = players.find(p => p.id === id);
+  if (!target || !isHost) return;
+
+  if (!confirm("Kick " + target.name + " from the game?")) return;
+
+  const code = sessionStorage.getItem("tod_room_code");
+  const token = sessionStorage.getItem("tod_player_token");
+
+  const { error } = await supabaseClient.rpc("tod_kick_player", {
+    p_code: code,
+    p_player_token: token,
+    p_target_id: id
+  });
+
+  if (error) {
+    console.error("Kick error:", error);
+    alert("Could not kick this player: " + error.message);
+    return;
+  }
+
+  lastViewKey = "";
+
+  if (phase === "lobby") await syncLobby();
+  else await syncGameState();
+}
+
 function goHome() {
   stopTimers();
   SESSION_KEYS.forEach(k => sessionStorage.removeItem(k));
@@ -1661,11 +1813,657 @@ function goHome() {
 
   show("home");
 }
+
+/* ------------------------------------------------------------------ */
+/* Background music: every player adds their own, only they hear it    */
+/* ------------------------------------------------------------------ */
+
+// Optional tracks every player gets (leave empty if everybody brings their own).
+// Example: { title: "Lobby theme", src: "music/theme.mp3" }
+const PLAYLIST = [];
+
+// Search by song name (type a name, the first result plays right away).
+// Needs a free YouTube Data API v3 key: paste it between the quotes.
+// Without a key, "Search" just opens YouTube in a new tab.
+const YOUTUBE_API_KEY = "";
+
+(function setupMusic() {
+  const panel = $("musicPanel");
+  const toggle = $("musicToggle");
+  const playBtn = $("musicPlay");
+  const vol = $("musicVol");
+  const linkInput = $("musicLink");
+  const fileInput = $("musicFiles");
+
+  const MAX_TRACKS = 40;
+  const AUDIO_EXT = /\.(mp3|ogg|oga|wav|m4a|aac|flac|opus|webm)(\?.*)?$/i;
+
+  // Saved choices (wrapped: storage can be blocked in private windows).
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  // tracks: { title, type: "audio" | "yt" | "ytlist", src | vid | list, local?, fixed? }
+  let tracks = PLAYLIST.map(t => ({ title: t.title, type: "audio", src: t.src, fixed: true }));
+
+  try {
+    const saved = JSON.parse(store.get("tod_music_tracks", "[]"));
+    if (Array.isArray(saved)) {
+      saved.forEach(t => {
+        if (t && typeof t.title === "string" && (t.type === "audio" || t.type === "yt" || t.type === "ytlist")) {
+          tracks.push(t);
+        }
+      });
+    }
+  } catch (e) {}
+
+  const audio = new Audio();
+  audio.preload = "auto";
+
+  let yt = null;
+  let ytPromise = null;
+  let ytPlaying = false;
+
+  let index = -1;
+  let wantPlaying = store.get("tod_music_on", "1") === "1";
+  let failures = 0;
+  let started = false;
+
+  const savedVol = parseInt(store.get("tod_music_vol", "35"), 10);
+  vol.value = isNaN(savedVol) ? 35 : savedVol;
+  audio.volume = vol.value / 100;
+
+  function setMsg(text, isError) {
+    const m = $("musicMsg");
+    m.textContent = text;
+    m.classList.toggle("err", !!isError);
+  }
+
+  function saveTracks() {
+    const keep = tracks
+      .filter(t => !t.local && !t.fixed)
+      .map(t => ({ title: t.title, type: t.type, src: t.src, vid: t.vid, list: t.list }));
+    store.set("tod_music_tracks", JSON.stringify(keep));
+  }
+
+  function setTitle(text) {
+    $("musicTitle").textContent = text || "Add your own music below";
+  }
+
+  function isCurrentPlaying() {
+    const t = tracks[index];
+    if (!t || !wantPlaying) return false;
+    return t.type === "audio" ? !audio.paused : ytPlaying;
+  }
+
+  function refresh() {
+    playBtn.textContent = wantPlaying ? "⏸" : "▶";
+    toggle.classList.toggle("off", !wantPlaying);
+    toggle.classList.toggle("playing", isCurrentPlaying());
+    toggle.textContent = wantPlaying ? "♫" : "🔇";
+  }
+
+  function renderList() {
+    const list = $("musicList");
+
+    if (!tracks.length) {
+      list.innerHTML = '<div class="music-empty">No music yet. Add a link or a file below.</div>';
+      return;
+    }
+
+    list.innerHTML = tracks.map((t, i) => `
+      <div class="music-item ${i === index ? "cur" : ""}" data-play="${i}">
+        <span class="mi-title">${esc(t.title)}</span>
+        ${t.type === "ytlist" ? '<span class="mi-tag">playlist</span>' : ""}
+        ${t.local ? '<span class="mi-tag">this session</span>' : ""}
+        ${t.fixed ? "" : `<button class="mi-x" data-rm="${i}" aria-label="Remove">✕</button>`}
+      </div>
+    `).join("");
+  }
+
+  /* ---- engines ---- */
+
+  function playAudio() {
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => { /* blocked until the next click */ });
+  }
+
+  function stopAll() {
+    audio.pause();
+    ytPlaying = false;
+    try { if (yt && yt.stopVideo) yt.stopVideo(); } catch (e) {}
+  }
+
+  function ensureYT() {
+    if (ytPromise) return ytPromise;
+
+    ytPromise = new Promise((resolve, reject) => {
+      const init = () => {
+        yt = new YT.Player("ytHost", {
+          height: "200",
+          width: "200",
+          playerVars: { playsinline: 1, controls: 0 },
+          events: {
+            onReady: () => { yt.setVolume(parseInt(vol.value, 10)); resolve(); },
+            onStateChange: onYtState,
+            onError: onYtError
+          }
+        });
+      };
+
+      if (window.YT && window.YT.Player) { init(); return; }
+
+      window.onYouTubeIframeAPIReady = init;
+      const s = document.createElement("script");
+      s.src = "https://www.youtube.com/iframe_api";
+      s.onerror = () => { ytPromise = null; reject(new Error("YouTube unreachable")); };
+      document.head.appendChild(s);
+    });
+
+    return ytPromise;
+  }
+
+  function onYtState(e) {
+    const t = tracks[index];
+    if (!t || t.type === "audio") return;
+
+    if (e.data === 1) {                       // playing
+      failures = 0;
+      ytPlaying = true;
+      let d = null;
+      try { d = yt.getVideoData(); } catch (err) {}
+      if (d && d.title) {
+        setTitle(d.title);
+        if (t.type === "yt" && t.title !== d.title) {
+          t.title = d.title;
+          saveTracks();
+          renderList();
+        }
+      }
+      refresh();
+    } else if (e.data === 2) {                // paused
+      ytPlaying = false;
+      refresh();
+    } else if (e.data === 0) {                // ended
+      ytPlaying = false;
+      if (t.type === "ytlist") {
+        try {
+          const pl = yt.getPlaylist() || [];
+          if (yt.getPlaylistIndex() < pl.length - 1) return; // the playlist moves on by itself
+        } catch (err) {}
+      }
+      next(1);
+    }
+  }
+
+  function onYtError() {
+    failures++;
+    if (failures >= tracks.length) {
+      ytPlaying = false;
+      setMsg("None of these tracks can be played. Some YouTube videos block outside players.", true);
+      refresh();
+      return;
+    }
+    const t = tracks[index];
+    if (t && t.type === "ytlist") {
+      try {
+        const pl = yt.getPlaylist() || [];
+        if (yt.getPlaylistIndex() < pl.length - 1) { yt.nextVideo(); return; }
+      } catch (err) {}
+    }
+    next(1);
+  }
+
+  function playTrack(i) {
+    if (!tracks.length) return;
+
+    index = (i + tracks.length) % tracks.length;
+    const t = tracks[index];
+    const mine = index;
+
+    stopAll();
+    setTitle(t.title);
+    renderList();
+
+    if (t.type === "audio") {
+      audio.src = t.src;
+      if (wantPlaying) playAudio();
+      refresh();
+      return;
+    }
+
+    ensureYT().then(() => {
+      if (index !== mine) return; // another track was chosen meanwhile
+      try {
+        if (t.type === "yt") {
+          if (wantPlaying) yt.loadVideoById(t.vid); else yt.cueVideoById(t.vid);
+        } else {
+          const opts = { listType: "playlist", list: t.list };
+          if (wantPlaying) yt.loadPlaylist(opts); else yt.cuePlaylist(opts);
+        }
+        yt.setVolume(parseInt(vol.value, 10));
+      } catch (err) {
+        onYtError();
+      }
+    }).catch(() => {
+      setMsg("YouTube could not be reached (an ad blocker can cause this).", true);
+      failures++;
+      if (failures < tracks.length) next(1);
+    });
+
+    refresh();
+  }
+
+  function next(step) {
+    if (!tracks.length) return;
+    playTrack((index < 0 ? 0 : index) + (step || 1));
+  }
+
+  function resume() {
+    const t = tracks[index];
+    if (!t) return;
+    if (t.type === "audio") playAudio();
+    else { try { yt.playVideo(); } catch (e) {} }
+  }
+
+  function pauseAll() {
+    audio.pause();
+    try { if (yt && yt.pauseVideo) yt.pauseVideo(); } catch (e) {}
+  }
+
+  /* ---- audio element events ---- */
+
+  audio.addEventListener("playing", () => { failures = 0; refresh(); });
+  audio.addEventListener("pause", refresh);
+  audio.addEventListener("ended", () => next(1));
+  audio.addEventListener("error", () => {
+    const t = tracks[index];
+    if (!t || t.type !== "audio") return;
+
+    failures++;
+    if (failures >= tracks.length) {
+      setMsg("None of these tracks can be played. Check the links or the files.", true);
+      refresh();
+      return;
+    }
+    setMsg("\"" + t.title + "\" could not be played: skipped.", true);
+    next(1);
+  });
+
+  /* ---- adding music ---- */
+
+  function parseYouTube(text) {
+    let u;
+    try { u = new URL(/^https?:\/\//i.test(text) ? text : "https://" + text); } catch (e) { return null; }
+
+    const host = u.hostname.replace(/^www\.|^m\.|^music\./, "");
+    if (host !== "youtube.com" && host !== "youtu.be") return null;
+
+    const list = u.searchParams.get("list");
+    let vid = u.searchParams.get("v");
+
+    if (!vid && host === "youtu.be") vid = u.pathname.slice(1);
+    if (!vid) {
+      const m = u.pathname.match(/^\/(?:shorts|embed|live)\/([\w-]{6,15})/);
+      if (m) vid = m[1];
+    }
+
+    // Normal playlists play as a whole; "radio" mixes (RD...) play as one video.
+    if (list && /^[\w-]{10,}$/.test(list) && !list.startsWith("RD")) {
+      return { type: "ytlist", list: list, title: "YouTube playlist" };
+    }
+    if (vid && /^[\w-]{6,15}$/.test(vid)) {
+      return { type: "yt", vid: vid, title: "YouTube video" };
+    }
+    return null;
+  }
+
+  function looksLikeLink(text) {
+    return /^https?:\/\//i.test(text) || /^(www\.)?(youtube\.com|youtu\.be|music\.youtube\.com)\//i.test(text);
+  }
+
+  function addTrack(t, playNow) {
+    if (tracks.length >= MAX_TRACKS) {
+      setMsg("You can keep up to " + MAX_TRACKS + " tracks. Remove one first.", true);
+      return false;
+    }
+    tracks.push(t);
+    saveTracks();
+    renderList();
+    if (playNow) {
+      wantPlaying = true;
+      store.set("tod_music_on", "1");
+      failures = 0;
+      playTrack(tracks.length - 1);
+    }
+    return true;
+  }
+
+  function addFromInput() {
+    const text = linkInput.value.trim();
+
+    if (!text) {
+      setMsg("Paste a YouTube link or a direct audio link first.", true);
+      return;
+    }
+
+    if (/spotify\.com|soundcloud\.com|apple\.com|deezer\.com/i.test(text)) {
+      setMsg("Spotify, SoundCloud, Apple Music and Deezer links cannot be played here. Use a YouTube link or an audio file.", true);
+      return;
+    }
+
+    const y = parseYouTube(text);
+    if (y) {
+      if (addTrack(y, true)) { linkInput.value = ""; setMsg("Added. The title appears once it starts playing."); }
+      return;
+    }
+
+    if (/^https?:\/\//i.test(text) && AUDIO_EXT.test(text)) {
+      let name = "Audio link";
+      try { name = decodeURIComponent(new URL(text).pathname.split("/").pop()).replace(/\.[^.]+$/, "") || name; } catch (e) {}
+      if (addTrack({ title: name, type: "audio", src: text }, true)) { linkInput.value = ""; setMsg("Added."); }
+      return;
+    }
+
+    if (looksLikeLink(text)) {
+      setMsg("This link is not a YouTube video or a direct audio file (.mp3, .ogg, .wav...).", true);
+    } else {
+      setMsg("That is not a link. Press Search to find the song on YouTube, then paste its link here.", true);
+    }
+  }
+
+  /* ---- search by song name (YouTube Data API) ---- */
+
+  let searching = false;
+  let autoIdx = -1;          // track added by the last search (can be swapped)
+  let lastResults = [];
+
+  let searchCache = {};
+  try { searchCache = JSON.parse(store.get("tod_music_cache", "{}")) || {}; } catch (e) {}
+
+  function decodeEntities(text) {
+    const t = document.createElement("textarea");
+    t.innerHTML = text;
+    return t.value;
+  }
+
+  async function ytSearch(query) {
+    const cacheKey = query.toLowerCase();
+    if (searchCache[cacheKey]) return searchCache[cacheKey];
+
+    const url = "https://www.googleapis.com/youtube/v3/search"
+      + "?part=snippet&type=video&videoEmbeddable=true&videoSyndicated=true&maxResults=5"
+      + "&q=" + encodeURIComponent(query)
+      + "&key=" + encodeURIComponent(YOUTUBE_API_KEY);
+
+    const res = await fetch(url);
+    const json = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      const first = json && json.error && json.error.errors && json.error.errors[0];
+      const err = new Error("search failed");
+      err.reason = (first && first.reason) || ("http" + res.status);
+      throw err;
+    }
+
+    const items = (json.items || [])
+      .filter(i => i.id && i.id.videoId)
+      .map(i => ({
+        vid: i.id.videoId,
+        title: decodeEntities(i.snippet.title),
+        channel: decodeEntities(i.snippet.channelTitle)
+      }));
+
+    if (items.length) {
+      searchCache[cacheKey] = items;
+      const keys = Object.keys(searchCache);
+      if (keys.length > 30) delete searchCache[keys[0]];
+      store.set("tod_music_cache", JSON.stringify(searchCache));
+    }
+
+    return items;
+  }
+
+  function showResults(items) {
+    const box = $("musicResults");
+    lastResults = items;
+
+    if (!items.length) {
+      box.classList.add("hidden");
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = '<div class="music-results-label">NOT THE RIGHT ONE? PICK ANOTHER</div>'
+      + items.map((r, i) => `
+        <div class="music-result" data-pick="${i}">${esc(r.title)}<small>${esc(r.channel)}</small></div>
+      `).join("");
+    box.classList.remove("hidden");
+  }
+
+  async function searchSong() {
+    const text = linkInput.value.trim();
+
+    if (!text) {
+      setMsg("Type the name of a song first.", true);
+      return;
+    }
+
+    if (looksLikeLink(text)) {
+      setMsg("This looks like a link: press Add link.", true);
+      return;
+    }
+
+    // No API key: fall back to a normal YouTube search in a new tab.
+    if (!YOUTUBE_API_KEY) {
+      window.open(
+        "https://www.youtube.com/results?search_query=" + encodeURIComponent(text),
+        "_blank",
+        "noopener"
+      );
+      setMsg("Copy the link of the song you like on YouTube, come back, paste it above and press Add link.");
+      return;
+    }
+
+    if (searching) return;
+    searching = true;
+    setMsg("Searching...");
+
+    try {
+      const items = await ytSearch(text);
+
+      if (!items.length) {
+        showResults([]);
+        setMsg("No result for \"" + text + "\". Try another spelling.", true);
+        return;
+      }
+
+      const first = items[0];
+      const added = addTrack({ title: first.title, type: "yt", vid: first.vid, auto: true }, true);
+      if (!added) return;
+
+      autoIdx = tracks.length - 1;
+      linkInput.value = "";
+      showResults(items.slice(1));
+      setMsg("Playing: " + first.title);
+    } catch (e) {
+      const r = e.reason || "";
+      if (r === "quotaExceeded" || r === "dailyLimitExceeded" || r === "rateLimitExceeded") {
+        setMsg("The daily search limit of the site is reached. Paste a YouTube link instead, or try again tomorrow.", true);
+      } else if (/key|forbidden|accessNotConfigured|ipRefererBlocked|http40[03]/i.test(r)) {
+        setMsg("The search is not set up correctly (API key problem). Paste a YouTube link instead.", true);
+      } else {
+        setMsg("The search failed. Check your connection, or paste a YouTube link.", true);
+      }
+    } finally {
+      searching = false;
+    }
+  }
+
+  // Swap the automatically chosen song for another search result.
+  function pickResult(i) {
+    const r = lastResults[i];
+    if (!r) return;
+
+    const t = { title: r.title, type: "yt", vid: r.vid };
+    wantPlaying = true;
+    store.set("tod_music_on", "1");
+    failures = 0;
+
+    if (autoIdx >= 0 && tracks[autoIdx] && tracks[autoIdx].auto) {
+      tracks[autoIdx] = t;
+      saveTracks();
+      showResults([]);
+      playTrack(autoIdx);
+      autoIdx = -1;
+    } else {
+      showResults([]);
+      addTrack(t, true);
+    }
+    setMsg("Playing: " + r.title);
+  }
+
+  function addFiles(files) {
+    let added = 0;
+
+    Array.from(files).forEach(f => {
+      if (!f.type.startsWith("audio/")) return;
+      if (tracks.length >= MAX_TRACKS) return;
+
+      tracks.push({
+        title: f.name.replace(/\.[^.]+$/, ""),
+        type: "audio",
+        src: URL.createObjectURL(f),
+        local: true
+      });
+      added++;
+    });
+
+    fileInput.value = "";
+
+    if (!added) {
+      setMsg("No audio file found. Pick mp3, ogg, wav or m4a files.", true);
+      return;
+    }
+
+    renderList();
+    setMsg(added + (added === 1 ? " file" : " files") + " added for this session. Files stay on your device and are forgotten when you close the page.");
+
+    if (index < 0 || !isCurrentPlaying()) {
+      wantPlaying = true;
+      store.set("tod_music_on", "1");
+      failures = 0;
+      playTrack(tracks.length - added);
+    }
+  }
+
+  function removeTrack(i) {
+    const t = tracks[i];
+    if (!t || t.fixed) return;
+
+    const wasCurrent = i === index;
+    if (t.local) { try { URL.revokeObjectURL(t.src); } catch (e) {} }
+
+    tracks.splice(i, 1);
+    saveTracks();
+
+    if (autoIdx === i) autoIdx = -1;
+    else if (i < autoIdx) autoIdx--;
+
+    if (wasCurrent) {
+      stopAll();
+      index = -1;
+      setTitle("");
+      if (tracks.length && wantPlaying) playTrack(Math.min(i, tracks.length - 1));
+    } else if (i < index) {
+      index--;
+    }
+
+    renderList();
+    refresh();
+  }
+
+  /* ---- buttons ---- */
+
+  toggle.addEventListener("click", () => panel.classList.toggle("hidden"));
+
+  playBtn.addEventListener("click", () => {
+    wantPlaying = !wantPlaying;
+    store.set("tod_music_on", wantPlaying ? "1" : "0");
+
+    if (wantPlaying) {
+      if (index < 0) playTrack(0); else resume();
+    } else {
+      pauseAll();
+    }
+    refresh();
+  });
+
+  $("musicNext").addEventListener("click", () => {
+    wantPlaying = true;
+    store.set("tod_music_on", "1");
+    next(1);
+  });
+
+  $("musicPrev").addEventListener("click", () => {
+    wantPlaying = true;
+    store.set("tod_music_on", "1");
+    next(-1);
+  });
+
+  vol.addEventListener("input", () => {
+    audio.volume = vol.value / 100;
+    try { if (yt && yt.setVolume) yt.setVolume(parseInt(vol.value, 10)); } catch (e) {}
+    store.set("tod_music_vol", String(vol.value));
+  });
+
+  $("musicList").addEventListener("click", e => {
+    const rm = e.target.closest("[data-rm]");
+    if (rm) { removeTrack(parseInt(rm.dataset.rm, 10)); return; }
+
+    const row = e.target.closest("[data-play]");
+    if (row) {
+      wantPlaying = true;
+      store.set("tod_music_on", "1");
+      failures = 0;
+      playTrack(parseInt(row.dataset.play, 10));
+    }
+  });
+
+  $("musicAdd").addEventListener("click", addFromInput);
+  $("musicSearch").addEventListener("click", searchSong);
+  $("musicResults").addEventListener("click", e => {
+    const row = e.target.closest("[data-pick]");
+    if (row) pickResult(parseInt(row.dataset.pick, 10));
+  });
+  $("musicFileBtn").addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => addFiles(fileInput.files));
+
+  linkInput.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    if (looksLikeLink(linkInput.value.trim())) addFromInput(); else searchSong();
+  });
+
+  // Browsers only allow sound after a click: the music starts on the first one.
+  function firstGesture() {
+    if (started) return;
+    started = true;
+    if (!wantPlaying || !tracks.length) return;
+    if (index < 0) playTrack(0); else resume();
+  }
+  ["click", "keydown", "touchend"].forEach(ev =>
+    document.addEventListener(ev, firstGesture, { once: true })
+  );
+
+  if (YOUTUBE_API_KEY) {
+    setMsg("Type a song name and press Enter: the first result plays right away.");
+  }
+
+  renderList();
+  refresh();
+})();
 </script>
 </body>
 </html>
-
-$('hostNextArea').classList.toggle('hidden',!(isHost&&!!room.chosen_prompt_id));$('nextRoundBtn').disabled=!(isHost&&!!room.chosen_prompt_id);$('nextRoundBtn').textContent='TOUR SUIVANT';}
-async function refresh(){if(!roomCode)return;try{const {data,error}=await rpc('tod_get_state',{p_code:roomCode});if(error)throw error;if(!data||!data.room)throw new Error('Partie introuvable.');render(data)}catch(e){msg('roomStatus','Connexion : '+e.message)}}
-const params=new URLSearchParams(location.search),prefill=params.get('room');if(prefill){const code=prefill.toUpperCase(),savedPlayer=sessionStorage.getItem('tod_player_'+code),savedHost=sessionStorage.getItem('tod_host_'+code);if(savedPlayer){roomCode=code;playerId=savedPlayer;hostPin=savedHost||null;isHost=!!savedHost;setRoomView()}else{$('joinCode').value=code;$('joinName').focus()}}
-</script></body></html>
